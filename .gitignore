@@ -1,0 +1,10 @@
+*.o
+*.a
+*.gcda
+*.gcno
+.vscode
+peda-session-*
+massif.out.*
+/babel_client
+/babel_server
+/build
