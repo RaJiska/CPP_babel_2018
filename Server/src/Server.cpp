@@ -24,18 +24,19 @@ Server::~Server()
 void Server::startAccept()
 {
 	static unsigned long long int id = 0;
-	boost::shared_ptr<NetClient> client(
-		new NetClient(id++, this->io_service));
+	boost::shared_ptr<NetworkClient> client(
+		new NetworkClient(id++, this->io_service));
 
 	this->acceptor.async_accept(client->getSocket(), boost::bind(
 		&Server::handleAccept,
 		this,
 		client,
 		boost::asio::placeholders::error));
+	this->clients.push_back(client);
 }
 
 void Server::handleAccept(
-	boost::shared_ptr<NetClient> client,
+	boost::shared_ptr<NetworkClient> client,
 	const boost::system::error_code &error)
 {
 	this->startAccept();

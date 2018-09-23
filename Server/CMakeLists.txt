@@ -4,7 +4,10 @@ set (SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 SET (SRCS
 	"${SOURCE_DIR}/main.cpp"
 	"${SOURCE_DIR}/Server.cpp"
-	"${SOURCE_DIR}/NetClient.cpp"
+	"${SOURCE_DIR}/Client.cpp"
+	"${SOURCE_DIR}/NetworkClient.cpp"
+	"${SOURCE_DIR}/NetworkMessage.cpp"
+	"${SOURCE_DIR}/NetworkMessageHeader.cpp"
 )
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
