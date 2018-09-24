@@ -16,6 +16,9 @@ class Server {
 	Server(unsigned short port);
 	virtual ~Server();
 
+	void run();
+	void cleanClosedPeers() noexcept;
+
 	private:
 	void startAccept();
 	void handleAccept(

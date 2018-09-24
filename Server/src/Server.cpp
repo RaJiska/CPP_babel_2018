@@ -15,11 +15,15 @@ Server::Server(unsigned short port) :
 			boost::asio::ip::tcp::v4(), port))
 {
 	this->startAccept();
-	this->io_service.run();
 }
 
 Server::~Server()
 {
+}
+
+void Server::run()
+{
+	this->io_service.run();
 }
 
 void Server::startAccept()
@@ -46,4 +50,23 @@ void Server::handleAccept(
 		netClient->start();
 	}
 	this->startAccept();
+}
+
+void Server::cleanClosedPeers() noexcept
+{
+	auto it = std::find_if(
+		this->clients.begin(),
+		this->clients.end(),
+		[] (boost::shared_ptr<NetworkClient> c) {
+			return (!c->getSocket().is_open());
+		});
+	while (it != this->clients.end()) {
+		this->clients.erase(it);
+		it = std::find_if(
+			this->clients.begin(),
+			this->clients.end(),
+			[] (boost::shared_ptr<NetworkClient> c) {
+				return (c->getSocket().is_open());
+			});
+	}
 }

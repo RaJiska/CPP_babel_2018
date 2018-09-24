@@ -26,7 +26,8 @@ class NetworkClient {
 	private:
 	unsigned long long int id;
 	boost::asio::ip::tcp::socket socket;
-	unsigned char data[1024];
+	unsigned char readData[8192];
+	unsigned char writeData[8192];
 	Client client;
 };
 

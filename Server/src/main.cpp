@@ -6,10 +6,13 @@
 */
 
 #include <iostream>
+#include <thread>
 #include "Server.hpp"
 
 int main(int argc, char * const *argv)
 {
 	Server server(1111);
+	std::thread t(&Server::run, &server);
+	t.join();
 	return EXIT_SUCCESS;
 }

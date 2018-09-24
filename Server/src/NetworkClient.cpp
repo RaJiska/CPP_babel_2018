@@ -21,7 +21,7 @@ NetworkClient::~NetworkClient()
 void NetworkClient::start()
 {
 	this->socket.async_read_some(
-		boost::asio::buffer(this->data, sizeof(this->data)),
+		boost::asio::buffer(this->readData, sizeof(this->readData)),
 		boost::bind(&NetworkClient::handleRead, this,
 			boost::asio::placeholders::error,
 			boost::asio::placeholders::bytes_transferred));
@@ -31,7 +31,6 @@ void NetworkClient::handleRead(
 	const boost::system::error_code &err, size_t bytesNb) noexcept
 {
 	if (!err) {
-		// In DATA
 		this->start();
 	}
 	else
@@ -52,5 +51,5 @@ unsigned long long int NetworkClient::getId() const noexcept
 
 boost::asio::ip::tcp::socket &NetworkClient::getSocket() noexcept
 {
-	return this->socket;
+	return (this->socket);
 }
