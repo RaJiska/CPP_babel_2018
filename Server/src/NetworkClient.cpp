@@ -5,6 +5,9 @@
 ** Client
 */
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <iostream> // DBG
@@ -38,17 +41,15 @@ void NetworkClient::handleRead(
 		this->disconnect(err.message());
 }
 
-void NetworkClient::sendData(const NetworkMessage &msg)
+void NetworkClient::sendMessage(const NetworkMessage &msg) noexcept
 {
-	/*
 	std::stringstream ss;
-	boost::archive::text_oarchive ar(ss);
+	boost::archive::text_oarchive oa(ss);
 
-	ar << msg;
-	buffers.push_back(boost::asio::buffer(oss.str()));
-	boost::asio::async_write(this->socket, buffers, boost::bind(&NetworkClient::handleWrite, this,
+	oa << msg;
+	boost::asio::async_write(this->socket, boost::asio::buffer(ss.str()),
+		boost::bind(&NetworkClient::handleWrite, this,
 			boost::asio::placeholders::error));
-	*/
 }
 
 void NetworkClient::handleWrite(

@@ -25,6 +25,19 @@ class NetworkMessageHeader {
 	NetworkMessageHeader(unsigned long long int to);
 	~NetworkMessageHeader();
 
+	void setFrom(unsigned long long int from) noexcept;
+	unsigned long long int getFrom() const noexcept;
+	void setTo(unsigned long long int to) noexcept;
+	unsigned long long int getTo() const noexcept;
+	void setType(NetworkMessageHeader::MessageType type) noexcept;
+	NetworkMessageHeader::MessageType getType() const noexcept;
+
+	private:
+	friend class boost::serialization::access;
+	enum MessageType type;
+	unsigned long long int from;
+	unsigned long long int to;
+
 	template<class Archive>
 	void serialize(Archive &ar, const unsigned int version)
 	{
@@ -32,16 +45,6 @@ class NetworkMessageHeader {
 		ar & this->to;
 		ar & this->from;
 	}
-
-	void setFrom(unsigned long long int from);
-	unsigned long long int getFrom() const;
-	void setTo(unsigned long long int to);
-	unsigned long long int getTo() const;
-
-	private:
-	enum MessageType type;
-	unsigned long long int from;
-	unsigned long long int to;
 };
 
 #endif /* !NETWORKMESSAGEHEADER_HPP_ */

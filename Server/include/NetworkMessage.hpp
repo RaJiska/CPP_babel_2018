@@ -18,18 +18,18 @@ class NetworkMessage {
 	NetworkMessage(const NetworkMessageHeader &header);
 	~NetworkMessage();
 
+	void setHeader(const NetworkMessageHeader &header);
+	const NetworkMessageHeader getHeader() const;
+
+	private:
+	friend class boost::serialization::access;
+	NetworkMessageHeader header;
 
 	template<class Archive>
 	void serialize(Archive &ar, const unsigned int version)
 	{
 		ar & this->header;
 	}
-
-	void setHeader(const NetworkMessageHeader &header);
-	const NetworkMessageHeader getHeader() const;
-
-	private:
-	NetworkMessageHeader header;
 };
 
 #endif /* !NETWORKMESSAGE_HPP_ */
