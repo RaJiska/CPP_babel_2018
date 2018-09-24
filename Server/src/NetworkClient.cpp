@@ -6,6 +6,7 @@
 */
 
 #include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
 #include <iostream> // DBG
 #include "NetworkClient.hpp"
 
@@ -35,6 +36,25 @@ void NetworkClient::handleRead(
 	}
 	else
 		this->disconnect(err.message());
+}
+
+void NetworkClient::sendData(const NetworkMessage &msg)
+{
+	/*
+	std::stringstream ss;
+	boost::archive::text_oarchive ar(ss);
+
+	ar << msg;
+	buffers.push_back(boost::asio::buffer(oss.str()));
+	boost::asio::async_write(this->socket, buffers, boost::bind(&NetworkClient::handleWrite, this,
+			boost::asio::placeholders::error));
+	*/
+}
+
+void NetworkClient::handleWrite(
+	const boost::system::error_code &err) noexcept
+{
+
 }
 
 void NetworkClient::disconnect(const std::string &reason) noexcept

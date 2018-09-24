@@ -10,6 +10,7 @@
 
 #include <boost/asio.hpp>
 #include "Client.hpp"
+#include "NetworkMessage.hpp"
 
 class NetworkClient {
 	public:
@@ -19,6 +20,9 @@ class NetworkClient {
 	void start();
 	void handleRead(
 		const boost::system::error_code &err, size_t bytesNb) noexcept;
+	void handleWrite(
+		const boost::system::error_code &err) noexcept;
+	void sendData(const NetworkMessage &msg);
 	void disconnect(const std::string &reason) noexcept;
 	unsigned long long int getId() const noexcept;
 	boost::asio::ip::tcp::socket &getSocket() noexcept;
@@ -27,8 +31,9 @@ class NetworkClient {
 	unsigned long long int id;
 	boost::asio::ip::tcp::socket socket;
 	unsigned char readData[8192];
-	unsigned char writeData[8192];
+	NetworkMessage readMessage;
 	Client client;
+	std::vector<boost::asio::const_buffer> buffers;
 };
 
 #endif /* !NetworkClient_HPP_ */

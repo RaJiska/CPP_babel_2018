@@ -70,3 +70,15 @@ void Server::cleanClosedPeers() noexcept
 			});
 	}
 }
+
+void Server::sendLol()
+{
+	std::cout << "Send" << std::endl;
+	NetworkMessageHeader header;
+	header.setFrom(5);
+	header.setTo(10);
+	NetworkMessage msg(header);
+	for (auto it : this->clients) {
+		it->sendData(msg);
+	}
+}

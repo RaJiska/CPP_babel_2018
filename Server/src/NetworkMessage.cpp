@@ -11,6 +11,11 @@ NetworkMessage::NetworkMessage()
 {
 }
 
+NetworkMessage::NetworkMessage(const NetworkMessageHeader &header) :
+	header(header)
+{
+}
+
 NetworkMessage::~NetworkMessage()
 {
 }

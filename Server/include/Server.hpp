@@ -18,6 +18,7 @@ class Server {
 
 	void run();
 	void cleanClosedPeers() noexcept;
+	void sendLol();
 
 	private:
 	void startAccept();
