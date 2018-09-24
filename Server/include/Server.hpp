@@ -19,7 +19,7 @@ class Server {
 	private:
 	void startAccept();
 	void handleAccept(
-		boost::shared_ptr<NetworkClient> client,
+		boost::shared_ptr<NetworkClient> netClient,
 		const boost::system::error_code &error);
 
 	boost::asio::io_service io_service;

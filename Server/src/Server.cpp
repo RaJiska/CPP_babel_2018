@@ -5,6 +5,7 @@
 ** Server
 */
 
+#include <iostream>
 #include <boost/bind.hpp>
 #include "Server.hpp"
 
@@ -32,12 +33,17 @@ void Server::startAccept()
 		this,
 		client,
 		boost::asio::placeholders::error));
-	this->clients.push_back(client);
 }
 
 void Server::handleAccept(
-	boost::shared_ptr<NetworkClient> client,
+	boost::shared_ptr<NetworkClient> netClient,
 	const boost::system::error_code &error)
 {
+	if (!error) {
+		this->clients.push_back(netClient);
+		std::cout << "Client " << netClient->getId() <<
+			" connected" << std::endl;
+		netClient->start();
+	}
 	this->startAccept();
 }

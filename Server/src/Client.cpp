@@ -7,7 +7,7 @@
 
 #include "Client.hpp"
 
-Client::Client(NetworkClient &netClient) : netClient(netClient)
+Client::Client()
 {
 }
 

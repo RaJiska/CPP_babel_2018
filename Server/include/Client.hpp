@@ -8,15 +8,13 @@
 #ifndef CLIENT_HPP_
 	#define CLIENT_HPP_
 
-#include "NetworkClient.hpp"
-
 class Client {
 	public:
-	Client(NetworkClient &netClient);
+	Client();
 	~Client();
 
 	private:
-	NetworkClient &netClient;
+	bool loggedIn = false;
 };
 
 #endif /* !CLIENT_HPP_ */

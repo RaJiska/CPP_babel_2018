@@ -5,6 +5,8 @@
 ** Client
 */
 
+#include <boost/bind.hpp>
+#include <iostream> // DBG
 #include "NetworkClient.hpp"
 
 NetworkClient::NetworkClient(unsigned long long int id,
@@ -14,6 +16,38 @@ NetworkClient::NetworkClient(unsigned long long int id,
 
 NetworkClient::~NetworkClient()
 {
+}
+
+void NetworkClient::start()
+{
+	this->socket.async_read_some(
+		boost::asio::buffer(this->data, sizeof(this->data)),
+		boost::bind(&NetworkClient::handleRead, this,
+			boost::asio::placeholders::error,
+			boost::asio::placeholders::bytes_transferred));
+}
+
+void NetworkClient::handleRead(
+	const boost::system::error_code &err, size_t bytesNb) noexcept
+{
+	if (!err) {
+		// In DATA
+		this->start();
+	}
+	else
+		this->disconnect(err.message());
+}
+
+void NetworkClient::disconnect(const std::string &reason) noexcept
+{
+	std::cout << "Client " << this->id <<
+		" disconnected: " << reason << std::endl;
+	this->socket.close();
+}
+
+unsigned long long int NetworkClient::getId() const noexcept
+{
+	return (this->id);
 }
 
 boost::asio::ip::tcp::socket &NetworkClient::getSocket() noexcept
