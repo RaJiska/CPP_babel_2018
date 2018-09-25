@@ -24,11 +24,16 @@ NetworkClient::~NetworkClient()
 
 void NetworkClient::start()
 {
-	this->socket.async_read_some(
-		boost::asio::buffer(this->readData, sizeof(this->readData)),
-		boost::bind(&NetworkClient::handleRead, this,
-			boost::asio::placeholders::error,
-			boost::asio::placeholders::bytes_transferred));
+	this->socket.read_some(boost::asio::buffer(memset(&this->readData[0], 0, 8192), sizeof(NetworkMessage::Header)));
+	struct NetworkMessage::Header *header = (struct NetworkMessage::Header *) &this->readData[0];
+	this->socket.read_some(boost::asio::buffer(memset(&this->readData[0], 0, 8192), header->size));
+	std::string str((char *) &this->readData[0]);
+	std::stringstream ss;
+	ss << str;
+	boost::archive::text_iarchive ia(ss);
+	NetworkMessage msg;
+	ia >> msg;
+	// DO SMTHING
 }
 
 void NetworkClient::handleRead(
@@ -41,12 +46,17 @@ void NetworkClient::handleRead(
 		this->disconnect(err.message());
 }
 
-void NetworkClient::sendMessage(const NetworkMessage &msg) noexcept
+void NetworkClient::sendMessage(NetworkMessage &msg) noexcept
 {
+	std::vector<boost::asio::const_buffer> buffers(2);
 	std::stringstream ss;
 	boost::archive::text_oarchive oa(ss);
-
 	oa << msg;
+	std::cout << "Sending: " << ss.str() << std::endl;
+	msg.getHeader().size = ss.str().size();
+	boost::asio::async_write(this->socket, boost::asio::buffer(boost::asio::buffer(&msg.getHeader(), sizeof(msg.getHeader()))),
+		boost::bind(&NetworkClient::handleWrite, this,
+			boost::asio::placeholders::error));
 	boost::asio::async_write(this->socket, boost::asio::buffer(ss.str()),
 		boost::bind(&NetworkClient::handleWrite, this,
 			boost::asio::placeholders::error));

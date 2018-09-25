@@ -14,21 +14,35 @@
 
 class NetworkMessage {
 	public:
+	struct Header
+	{
+		enum MessageType
+		{
+			TYPE_LOGIN,
+			TYPE_LOGOUT,
+			TYPE_CONTROL,
+			TYPE_VOICE
+		};
+		unsigned long long int to;
+		unsigned long long int from;
+		enum MessageType type;
+		size_t size;
+	};
+
 	NetworkMessage();
-	NetworkMessage(const NetworkMessageHeader &header);
+	NetworkMessage(const struct NetworkMessage::Header &header);
 	~NetworkMessage();
 
-	void setHeader(const NetworkMessageHeader &header);
-	const NetworkMessageHeader getHeader() const;
+	struct NetworkMessage::Header &getHeader();
 
 	private:
 	friend class boost::serialization::access;
-	NetworkMessageHeader header;
+	struct Header header;
 
 	template<class Archive>
 	void serialize(Archive &ar, const unsigned int version)
 	{
-		ar & this->header;
+
 	}
 };
 

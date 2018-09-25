@@ -22,7 +22,7 @@ class NetworkClient {
 		const boost::system::error_code &err, size_t bytesNb) noexcept;
 	void handleWrite(
 		const boost::system::error_code &err) noexcept;
-	void sendMessage(const NetworkMessage &msg) noexcept;
+	void sendMessage(NetworkMessage &msg) noexcept;
 	void disconnect(const std::string &reason) noexcept;
 	unsigned long long int getId() const noexcept;
 	boost::asio::ip::tcp::socket &getSocket() noexcept;

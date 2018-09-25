@@ -11,7 +11,7 @@ NetworkMessage::NetworkMessage()
 {
 }
 
-NetworkMessage::NetworkMessage(const NetworkMessageHeader &header) :
+NetworkMessage::NetworkMessage(const struct NetworkMessage::Header &header) :
 	header(header)
 {
 }
@@ -20,12 +20,7 @@ NetworkMessage::~NetworkMessage()
 {
 }
 
-void NetworkMessage::setHeader(const NetworkMessageHeader &header)
+struct NetworkMessage::Header &NetworkMessage::getHeader()
 {
-	this->header = header;
-}
-
-const NetworkMessageHeader NetworkMessage::getHeader() const
-{
-	return (this->header);
+	return(this->header);
 }

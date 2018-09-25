@@ -75,11 +75,9 @@ void Server::sendLol()
 {
 	/*
 	std::cout << "Send" << std::endl;
-	NetworkMessageHeader header;
-	header.setFrom(5);
-	header.setTo(10);
-	header.setType(NetworkMessageHeader::TYPE_CONTROL);
+	struct NetworkMessage::Header header = { 0, 1, NetworkMessage::Header::TYPE_CONTROL, 4 };
 	NetworkMessage msg(header);
+	msg.lolsuce = 4564;
 	for (auto it : this->clients) {
 		it->sendMessage(msg);
 	}
