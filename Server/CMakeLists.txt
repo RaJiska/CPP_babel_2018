@@ -7,6 +7,10 @@ SET (SRCS
 	"${SOURCE_DIR}/Client.cpp"
 	"${SOURCE_DIR}/NetworkClient.cpp"
 	"${SOURCE_DIR}/NetworkMessage.cpp"
+	"${SOURCE_DIR}/NetworkMessageLogin.cpp"
+	"${SOURCE_DIR}/NetworkMessageLogout.cpp"
+	"${SOURCE_DIR}/NetworkMessageClientJoined.cpp"
+	"${SOURCE_DIR}/NetworkMessageClientLeft.cpp"
 	"${SOURCE_DIR}/NetworkMessageHeader.cpp"
 )
 

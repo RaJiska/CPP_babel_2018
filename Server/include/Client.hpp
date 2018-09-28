@@ -8,6 +8,7 @@
 #ifndef CLIENT_HPP_
 	#define CLIENT_HPP_
 
+#include <string>
 class Client {
 	public:
 	Client();
@@ -15,6 +16,7 @@ class Client {
 
 	private:
 	bool loggedIn = false;
+	std::string name;
 };
 
 #endif /* !CLIENT_HPP_ */

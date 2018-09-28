@@ -31,6 +31,8 @@ class NetworkClient {
 	unsigned long long int id;
 	boost::asio::ip::tcp::socket socket;
 	unsigned char readData[8192];
+	struct NetworkMessage::Header *header =
+		(struct NetworkMessage::Header *) &this->readData[0];
 	NetworkMessage readMessage;
 	Client client;
 };

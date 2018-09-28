@@ -16,7 +16,9 @@ class NetworkMessageHeader {
 	enum MessageType
 	{
 		TYPE_LOGIN,
+		TYPE_CLIENT_JOINED,
 		TYPE_LOGOUT,
+		TYPE_CLIENT_LEFT,
 		TYPE_CONTROL,
 		TYPE_VOICE
 	};
