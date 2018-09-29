@@ -102,6 +102,11 @@ bool Server::clientExistsByName(const std::string &name) const noexcept
 	return (false);
 }
 
+std::vector<boost::shared_ptr<NetworkClient>> &Server::getClients() noexcept
+{
+	return (this->clients);
+}
+
 void Server::sendLol()
 {
 	/*

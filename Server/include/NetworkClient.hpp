@@ -35,6 +35,9 @@ class NetworkClient {
 	void handleMsgError(NetworkMessage &msg) const noexcept;
 	void handleMsgLogin(NetworkMessage &msg) noexcept;
 	void handleMsgLogout(NetworkMessage &msg) noexcept;
+	void handleMsgCall(NetworkMessage &msg) noexcept;
+	void handleMsgHangup(NetworkMessage &msg) noexcept;
+	void broadcastMsg(NetworkMessage &msg) const noexcept;
 	unsigned long long int getId() const noexcept;
 	boost::asio::ip::tcp::socket &getSocket() noexcept;
 	Client &getClient() noexcept;

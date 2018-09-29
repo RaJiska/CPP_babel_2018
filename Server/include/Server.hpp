@@ -24,6 +24,7 @@ class Server {
 	boost::shared_ptr<NetworkClient> clientById(unsigned long long int id);
 	boost::shared_ptr<NetworkClient> clientByName(const std::string &name);
 	bool clientExistsByName(const std::string &name) const noexcept;
+	std::vector<boost::shared_ptr<NetworkClient>> &getClients() noexcept;
 	void sendLol();
 
 	private:

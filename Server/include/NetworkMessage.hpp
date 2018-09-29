@@ -19,6 +19,8 @@ class NetworkMessage {
 			TYPE_ERROR,
 			TYPE_LOGIN,
 			TYPE_LOGOUT,
+			TYPE_CALL,
+			TYPE_HANGUP,
 			TYPE_VOICE
 		};
 		uint64_t to;
@@ -31,11 +33,13 @@ class NetworkMessage {
 	{
 		uint64_t id;
 		char name[32];
+		bool myself;
 	};
 
 	struct MsgLogout
 	{
 		uint64_t id;
+		bool myself;
 	};
 	NetworkMessage();
 	NetworkMessage(const struct NetworkMessage::Header &header);
