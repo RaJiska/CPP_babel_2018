@@ -33,7 +33,7 @@ class NetworkClient {
 	unsigned char readData[8192];
 	struct NetworkMessage::Header *header =
 		(struct NetworkMessage::Header *) &this->readData[0];
-	NetworkMessage readMessage;
+	INetworkMessage *readMessage;
 	Client client;
 };
 

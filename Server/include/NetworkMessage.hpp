@@ -10,9 +10,10 @@
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include "INetworkMessage.hpp"
 #include "NetworkMessageHeader.hpp"
 
-class NetworkMessage {
+class NetworkMessage : public INetworkMessage {
 	public:
 	struct Header
 	{
@@ -31,19 +32,15 @@ class NetworkMessage {
 
 	NetworkMessage();
 	NetworkMessage(const struct NetworkMessage::Header &header);
-	~NetworkMessage();
+	virtual ~NetworkMessage() = 0;
 
 	struct NetworkMessage::Header &getHeader();
+	virtual void serialize(PolyArchive ar, unsigned int) = 0;
 
 	private:
-	friend class boost::serialization::access;
 	struct Header header;
-
-	template<class Archive>
-	void serialize(Archive &ar, const unsigned int version)
-	{
-
-	}
 };
+
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(NetworkMessage)
 
 #endif /* !NETWORKMESSAGE_HPP_ */

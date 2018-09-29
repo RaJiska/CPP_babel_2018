@@ -19,3 +19,8 @@ NetworkMessageLogout::NetworkMessageLogout(
 NetworkMessageLogout::~NetworkMessageLogout()
 {
 }
+
+virtual void NetworkMessageLogout::serialize(PolyArchive ar, unsigned int) override
+{
+
+}

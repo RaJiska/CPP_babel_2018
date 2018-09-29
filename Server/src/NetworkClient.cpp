@@ -24,6 +24,7 @@ NetworkClient::~NetworkClient()
 
 void NetworkClient::start()
 {
+	/*
 	this->socket.read_some(boost::asio::buffer(memset(&this->readData[0], 0, 8192), sizeof(NetworkMessage::Header)));
 	struct NetworkMessage::Header *header = (struct NetworkMessage::Header *) &this->readData[0];
 	this->socket.read_some(boost::asio::buffer(memset(&this->readData[0], 0, 8192), header->size));
@@ -31,9 +32,10 @@ void NetworkClient::start()
 	std::stringstream ss;
 	ss << str;
 	boost::archive::text_iarchive ia(ss);
-	NetworkMessage msg;
-	ia >> msg;
+	//NetworkMessage msg;
+	//ia >> msg;
 	// DO SMTHING
+	*/
 }
 
 void NetworkClient::handleRead(
@@ -48,6 +50,7 @@ void NetworkClient::handleRead(
 
 void NetworkClient::sendMessage(NetworkMessage &msg) noexcept
 {
+	/*
 	std::vector<boost::asio::const_buffer> buffers(2);
 	std::stringstream ss;
 	boost::archive::text_oarchive oa(ss);
@@ -60,6 +63,7 @@ void NetworkClient::sendMessage(NetworkMessage &msg) noexcept
 	boost::asio::async_write(this->socket, boost::asio::buffer(ss.str()),
 		boost::bind(&NetworkClient::handleWrite, this,
 			boost::asio::placeholders::error));
+	*/
 }
 
 void NetworkClient::handleWrite(

@@ -9,6 +9,7 @@
 	#define NETWORKMESSAGELOGIN_HPP_
 
 #include "NetworkMessage.hpp"
+#include <boost/serialization/export.hpp>
 
 class NetworkMessageLogin : public NetworkMessage {
 	public:
@@ -16,19 +17,18 @@ class NetworkMessageLogin : public NetworkMessage {
 	NetworkMessageLogin(const struct NetworkMessage::Header &header);
 	~NetworkMessageLogin();
 
+	void setId(unsigned long long int id) noexcept;
+	unsigned long long int getId() const noexcept;
+	void setName(const std::string &name) noexcept;
+	const std::string &getName() const noexcept;
+
+	virtual void serialize(PolyArchive ar, unsigned int) override;
+
 	protected:
 	unsigned long long int id;
 	std::string name;
-
-	private:
-	friend class boost::serialization::access;
-
-	template<class Archive>
-	void serialize(Archive &ar, const unsigned int version)
-	{
-		ar & id;
-		ar & name;
-	}
 };
+
+BOOST_CLASS_EXPORT(NetworkMessageLogin)
 
 #endif /* !NETWORKMESSAGELOGIN_HPP_ */

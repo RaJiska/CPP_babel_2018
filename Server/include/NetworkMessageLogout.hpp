@@ -16,15 +16,10 @@ class NetworkMessageLogout : public NetworkMessage {
 	NetworkMessageLogout(const struct NetworkMessage::Header &header);
 	~NetworkMessageLogout();
 
-	private:
-	friend class boost::serialization::access;
-	unsigned long long int id;
+	virtual void serialize(PolyArchive ar, unsigned int) override;
 
-	template<class Archive>
-	void serialize(Archive &ar, const unsigned int version)
-	{
-		ar & id;
-	}
+	private:
+	unsigned long long int id;
 };
 
 #endif /* !NETWORKMESSAGELOGOUT_HPP_ */

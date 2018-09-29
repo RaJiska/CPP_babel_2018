@@ -22,5 +22,5 @@ NetworkMessage::~NetworkMessage()
 
 struct NetworkMessage::Header &NetworkMessage::getHeader()
 {
-	return(this->header);
+	return (this->header);
 }

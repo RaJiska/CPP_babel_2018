@@ -8,6 +8,7 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include "Server.hpp"
+#include "NetworkMessageLogin.hpp"
 
 Server::Server(unsigned short port) :
 	acceptor(this->io_service,
@@ -73,13 +74,18 @@ void Server::cleanClosedPeers() noexcept
 
 void Server::sendLol()
 {
-	/*
 	std::cout << "Send" << std::endl;
-	struct NetworkMessage::Header header = { 0, 1, NetworkMessage::Header::TYPE_CONTROL, 4 };
-	NetworkMessage msg(header);
-	msg.lolsuce = 4564;
+	struct NetworkMessage::Header header = { 0, 1, NetworkMessage::Header::TYPE_LOGIN, 4 };
+	NetworkMessageLogin msg(header);
+	msg.setId(1245);
+	msg.setName("LelNoob");
+	INetworkMessage *lel = new NetworkMessageLogin(msg);
+
+	std::stringstream ss;
+	boost::archive::polymorphic_text_oarchive oa(ss);
+	oa << lel;
+	std::cout << "Serial: " << ss.str() << std::endl;
 	for (auto it : this->clients) {
 		it->sendMessage(msg);
 	}
-	*/
 }
