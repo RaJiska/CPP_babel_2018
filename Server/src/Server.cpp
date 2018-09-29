@@ -30,7 +30,7 @@ void Server::startAccept()
 {
 	static unsigned long long int id = 0;
 	boost::shared_ptr<NetworkClient> client(
-		new NetworkClient(id++, this->io_service));
+		new NetworkClient(*this, ++id, this->io_service));
 
 	this->acceptor.async_accept(client->getSocket(), boost::bind(
 		&Server::handleAccept,
@@ -71,13 +71,50 @@ void Server::cleanClosedPeers() noexcept
 	}
 }
 
+boost::shared_ptr<NetworkClient> Server::clientById(unsigned long long int id)
+{
+	for (auto it : this->clients) {
+		if (it->getId() == id)
+			return (it);
+	}
+	throw std::out_of_range("ID Not in list");
+}
+
+boost::shared_ptr<NetworkClient> Server::clientByName(const std::string &name)
+{
+	for (auto it : this->clients) {
+		if (it->getClient().getName() == name)
+			return (it);
+	}
+	throw std::out_of_range("ID Not in list");
+}
+
+bool Server::clientExistsByName(const std::string &name) const noexcept
+{
+	for (auto it : this->clients) {
+		if (it->getClient().getLoggedIn() &&
+			it->getClient().getName() == name)
+			return (true);
+	}
+	return (false);
+}
+
 void Server::sendLol()
 {
 	/*
 	std::cout << "Send" << std::endl;
-	struct NetworkMessage::Header header = { 0, 1, NetworkMessage::Header::TYPE_CONTROL, 4 };
+	struct NetworkMessage::Header header;
+	std::memset(&header, 0, sizeof(struct NetworkMessage::Header));
+	header.to = 1;
+	header.from = 2;
+	header.type = NetworkMessage::Header::MessageType::TYPE_LOGIN;
+	header.size = sizeof(struct NetworkMessage::MsgLogin);
 	NetworkMessage msg(header);
-	msg.lolsuce = 4564;
+	struct NetworkMessage::MsgLogin a;
+	std::memset(&a, 0, sizeof(struct NetworkMessage::MsgLogin));
+	a.id = 0;
+	std::strcpy(&a.name[0], "Hello");
+	msg.setData((unsigned char *) &a, sizeof(struct NetworkMessage::MsgLogin));
 	for (auto it : this->clients) {
 		it->sendMessage(msg);
 	}

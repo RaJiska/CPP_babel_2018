@@ -14,6 +14,11 @@ class Client {
 	Client();
 	~Client();
 
+	void setLoggedIn(bool loggedIn) noexcept;
+	bool getLoggedIn() const noexcept;
+	void setName(const std::string &name) noexcept;
+	const std::string &getName() const noexcept;
+
 	private:
 	bool loggedIn = false;
 	std::string name;

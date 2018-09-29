@@ -11,6 +11,9 @@
 #include <boost/asio.hpp>
 #include "NetworkClient.hpp"
 
+class NetworkClient;
+class NetworkMessage;
+
 class Server {
 	public:
 	Server(unsigned short port);
@@ -18,6 +21,9 @@ class Server {
 
 	void run();
 	void cleanClosedPeers() noexcept;
+	boost::shared_ptr<NetworkClient> clientById(unsigned long long int id);
+	boost::shared_ptr<NetworkClient> clientByName(const std::string &name);
+	bool clientExistsByName(const std::string &name) const noexcept;
 	void sendLol();
 
 	private:
