@@ -58,7 +58,8 @@ void Server::cleanClosedPeers() noexcept
 		this->clients.begin(),
 		this->clients.end(),
 		[] (boost::shared_ptr<NetworkClient> c) {
-			return (!c->getSocket().is_open());
+			return (!c->getSocket().is_open() ||
+				!c->getClient().getConnected());
 		});
 	while (it != this->clients.end()) {
 		this->clients.erase(it);
@@ -66,7 +67,8 @@ void Server::cleanClosedPeers() noexcept
 			this->clients.begin(),
 			this->clients.end(),
 			[] (boost::shared_ptr<NetworkClient> c) {
-				return (c->getSocket().is_open());
+				return (!c->getSocket().is_open() ||
+					!c->getClient().getConnected());
 			});
 	}
 }
@@ -93,8 +95,9 @@ bool Server::clientExistsByName(const std::string &name) const noexcept
 {
 	for (auto it : this->clients) {
 		if (it->getClient().getLoggedIn() &&
-			it->getClient().getName() == name)
+			it->getClient().getName() == name) {
 			return (true);
+		}
 	}
 	return (false);
 }

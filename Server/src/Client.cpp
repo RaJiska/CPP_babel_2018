@@ -34,3 +34,13 @@ const std::string &Client::getName() const noexcept
 {
 	return (this->name);
 }
+
+void Client::setConnected(bool connected) noexcept
+{
+	this->connected = connected;
+}
+
+bool Client::getConnected() const noexcept
+{
+	return (this->connected);
+}

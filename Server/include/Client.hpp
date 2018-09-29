@@ -18,8 +18,11 @@ class Client {
 	bool getLoggedIn() const noexcept;
 	void setName(const std::string &name) noexcept;
 	const std::string &getName() const noexcept;
+	void setConnected(bool connected) noexcept;
+	bool getConnected() const noexcept;
 
 	private:
+	bool connected = true;
 	bool loggedIn = false;
 	std::string name;
 };

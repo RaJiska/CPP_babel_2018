@@ -24,6 +24,10 @@ class NetworkClient {
 	virtual ~NetworkClient();
 
 	void start();
+	void handleReadHeader(
+		const boost::system::error_code& err, size_t bytes_transferred);
+	void handleReadData(
+		const boost::system::error_code& err, size_t bytes_transferred);
 	void handleWrite(
 		const boost::system::error_code &err) noexcept;
 	void sendMessage(NetworkMessage &msg) noexcept;
@@ -41,9 +45,8 @@ class NetworkClient {
 		std::function<void(NetworkMessage &)>> msgMap;
 	unsigned long long int id;
 	boost::asio::ip::tcp::socket socket;
+	NetworkMessage msg;
 	unsigned char readData[8192];
-	struct NetworkMessage::Header *header =
-		(struct NetworkMessage::Header *) &this->readData[0];
 	Client client;
 	Server &server;
 };

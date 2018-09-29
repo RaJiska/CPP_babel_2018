@@ -28,19 +28,37 @@ NetworkClient::~NetworkClient()
 
 void NetworkClient::start()
 {
-	try {
-		while (true) {
-			this->socket.read_some(boost::asio::buffer(memset(&this->readData[0], 0, 8192), sizeof(NetworkMessage::Header)));
-			struct NetworkMessage::Header header;
-			std::memcpy(&header, &this->readData[0], sizeof(NetworkMessage::Header));
-			this->socket.read_some(boost::asio::buffer(memset(&this->readData[0], 0, 8192), header.size));
-			NetworkMessage msg(header);
-			msg.setData(this->readData, header.size);
-			this->msgMap[header.type](msg);
-		}
+	this->socket.async_read_some(
+		boost::asio::buffer(memset(&this->readData[0], 0, 8192), sizeof(NetworkMessage::Header)),
+		boost::bind(&NetworkClient::handleReadHeader, this,
+			boost::asio::placeholders::error,
+			boost::asio::placeholders::bytes_transferred));
+}
+
+void NetworkClient::handleReadHeader(
+	const boost::system::error_code& err, size_t bytes_transferred)
+{
+	if (err)
+		this->disconnect(err.message());
+	else {
+		std::memcpy(&this->msg.getHeader(), &this->readData[0], sizeof(NetworkMessage::Header));
+		this->socket.async_read_some(
+			boost::asio::buffer(memset(&this->readData[0], 0, 8192), this->msg.getHeader().size),
+			boost::bind(&NetworkClient::handleReadData, this,
+			boost::asio::placeholders::error,
+			boost::asio::placeholders::bytes_transferred));
 	}
-	catch (std::exception &e) {
-		this->disconnect(e.what());
+}
+
+void NetworkClient::handleReadData(
+	const boost::system::error_code& err, size_t bytes_transferred)
+{
+	if (err)
+		this->disconnect(std::to_string(err.value()) + err.message());
+	else {
+		this->msg.setData(this->readData, this->msg.getHeader().size);
+		this->msgMap[this->msg.getHeader().type](msg);
+		this->start();
 	}
 }
 
@@ -65,7 +83,7 @@ void NetworkClient::disconnect(const std::string &reason) noexcept
 {
 	std::cout << "Client " << this->id <<
 		" disconnected: " << reason << std::endl;
-	this->socket.close();
+	this->client.setConnected(false);
 	this->server.cleanClosedPeers();
 }
 
@@ -85,14 +103,12 @@ void NetworkClient::handleMsgLogin(NetworkMessage &msg) noexcept
 			this->server.clientExistsByName(
 				std::string(&data->name[0])))
 			throw std::logic_error("Client already exists");
-			std::cout << "Aftr" << std::endl;
 			respHeader.type = NetworkMessage::Header::MessageType::TYPE_LOGIN;
 			this->client.setLoggedIn(true);
 			this->client.setName(std::string(&data->name[0]));
-			std::cout << "Client " << this->client.getName() << "(" << this->id << ") logged in" << std::endl;
+			std::cout << "Client " << this->client.getName() << " (" << this->id << ") logged in" << std::endl;
 	}
 	catch (std::exception &e) {
-		std::cout << "Err" << std::endl;
 		respHeader.type =
 			NetworkMessage::Header::MessageType::TYPE_ERROR;
 	}
@@ -110,7 +126,7 @@ void NetworkClient::handleMsgLogout(NetworkMessage &msg) noexcept
 	else {
 		respHeader.type = NetworkMessage::Header::MessageType::TYPE_LOGOUT;
 		this->client.setLoggedIn(false);
-		std::cout << "Client " << this->client.getName() << "(" << this->id << ") logged out" << std::endl;
+		std::cout << "Client " << this->client.getName() << " (" << this->id << ") logged out" << std::endl;
 	}
 	NetworkMessage respMsg(respHeader);
 	this->sendMessage(respMsg);
