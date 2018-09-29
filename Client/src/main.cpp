@@ -6,8 +6,9 @@
 */
 
 #include <iostream>
-#include <QApplication>
-#include "mainwindow.h"
+#include "voice.hpp"
+/* #include <QApplication>
+#include "mainwindow.h" */
 
 int main(int argc, char * const *argv)
 {
@@ -16,5 +17,15 @@ int main(int argc, char * const *argv)
 	w.show();
 
 	return a.exec(); */
+
+
+	Voice ss;
+	ss.initPa();
+	ss.initParams();
+	ss.initStream();
+	while (1) {
+		ss.readFromStream();
+		ss.writeOnStream(ss.getReadBuffer());
+	}
 	return EXIT_SUCCESS;
 }
