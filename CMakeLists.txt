@@ -8,4 +8,4 @@ conan_basic_setup()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 add_subdirectory(Server)
-#add_subdirectory(Client)
+add_subdirectory(Client)

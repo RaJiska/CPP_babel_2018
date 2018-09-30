@@ -6,9 +6,9 @@
 */
 
 #include <iostream>
+#include <QApplication>
+#include "mainwindow.h"
 #include "voice.hpp"
-/* #include <QApplication>
-#include "mainwindow.h" */
 
 int main(int argc, char * const *argv)
 {
