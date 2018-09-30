@@ -41,6 +41,12 @@ class NetworkMessage {
 		uint64_t id;
 		bool myself;
 	};
+
+	struct MsgCall
+	{
+		char address[32];
+	};
+
 	NetworkMessage();
 	NetworkMessage(const struct NetworkMessage::Header &header);
 	~NetworkMessage() = default;

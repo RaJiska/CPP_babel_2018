@@ -22,8 +22,7 @@ NetworkClient::NetworkClient(Server &server,
 	this->msgMap[NetworkMessage::Header::TYPE_LOGOUT] =
 	std::bind(&NetworkClient::handleMsgLogout, this, std::placeholders::_1);
 	this->msgMap[NetworkMessage::Header::TYPE_CALL] =
-		std::bind(&NetworkClient::handleMsgCall,
-			this, std::placeholders::_1);
+	std::bind(&NetworkClient::handleMsgCall, this, std::placeholders::_1);
 	this->msgMap[NetworkMessage::Header::TYPE_HANGUP] =
 	std::bind(&NetworkClient::handleMsgHangup, this, std::placeholders::_1);
 }
