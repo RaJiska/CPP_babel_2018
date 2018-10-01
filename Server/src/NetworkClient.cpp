@@ -106,7 +106,7 @@ void NetworkClient::handleMsgLogin(NetworkMessage &msg) noexcept
 	struct NetworkMessage::MsgLogin *data =
 		(struct NetworkMessage::MsgLogin *) msg.getData();
 	struct NetworkMessage::Header rHeader = { this->id, this->id,
-			NetworkMessage::Header::MessageType::TYPE_ERROR };
+			NetworkMessage::Header::MessageType::TYPE_ERROR, 0 };
 	try {
 		if (this->client.getLoggedIn() ||
 			this->server.clientExistsByName(
@@ -117,6 +117,7 @@ void NetworkClient::handleMsgLogin(NetworkMessage &msg) noexcept
 		std::cout << "Client " << this->client.getName()
 			<< " (" << this->id << ") logged in" << std::endl;
 		rHeader.type = NetworkMessage::Header::MessageType::TYPE_LOGIN;
+		rHeader.size = sizeof(struct NetworkMessage::MsgLogin);
 		this->broadcastMsg(msg);
 	}
 	catch (std::exception &e) {
@@ -132,36 +133,43 @@ void NetworkClient::handleMsgLogout(NetworkMessage &msg) noexcept
 	rHeader.to = this->id;
 	if (!this->client.getLoggedIn()) {
 		rHeader.type = NetworkMessage::Header::MessageType::TYPE_ERROR;
-		NetworkMessage rMsg(rHeader);
-		this->sendMessage(rMsg);
 	}
 	else {
 		rHeader.type = NetworkMessage::Header::MessageType::TYPE_LOGOUT;
 		this->client.setLoggedIn(false);
 		std::cout << "Client " << this->client.getName() << " ("
 			<< this->id << ") logged out" << std::endl;
-		NetworkMessage rMsg(rHeader);
-		this->broadcastMsg(rMsg);
 	}
+	rHeader.size = 0;
+	NetworkMessage rMsg(rHeader);
+	this->broadcastMsg(rMsg);
 }
 
 void NetworkClient::handleMsgCall(NetworkMessage &msg) noexcept
 {
 	struct NetworkMessage::Header respHeader;
-	if (!this->client.getLoggedIn()) {
+	struct NetworkMessage::MsgCall *data =
+		(struct NetworkMessage::MsgCall *) msg.getData();
+	std::memset(data, 0, sizeof(struct NetworkMessage::MsgCall));
+	if (!this->client.getLoggedIn() ||
+		!this->server.clientExistsById(msg.getHeader().to)) {
 		respHeader.from = 0;
 		respHeader.to = this->id;
 		respHeader.type =
 			NetworkMessage::Header::MessageType::TYPE_ERROR;
 	}
 	else {
+		std::strcpy(&data->address[0], this->socket.remote_endpoint().
+			address().to_string().c_str());
 		respHeader.from = this->id;
 		respHeader.to = msg.getHeader().to;
 		respHeader.type =
 			NetworkMessage::Header::MessageType::TYPE_CALL;
 	}
-	NetworkMessage respMsg(respHeader);
-	this->sendMessage(respMsg);
+	std::cout << "Sending: '" << data->address << "'" << std::endl;
+	respHeader.size = sizeof(struct NetworkMessage::MsgCall);
+	msg.setHeader(respHeader);
+	this->server.clientById(msg.getHeader().to)->sendMessage(msg);
 }
 
 void NetworkClient::handleMsgHangup(NetworkMessage &msg) noexcept
@@ -179,6 +187,7 @@ void NetworkClient::handleMsgHangup(NetworkMessage &msg) noexcept
 		respHeader.type =
 			NetworkMessage::Header::MessageType::TYPE_HANGUP;
 	}
+	respHeader.size = 0;
 	NetworkMessage respMsg(respHeader);
 	this->sendMessage(respMsg);
 }

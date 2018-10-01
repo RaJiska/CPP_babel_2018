@@ -102,6 +102,17 @@ bool Server::clientExistsByName(const std::string &name) const noexcept
 	return (false);
 }
 
+bool Server::clientExistsById(unsigned long long int id) const noexcept
+{
+	for (auto it : this->clients) {
+		if (it->getClient().getLoggedIn() &&
+			it->getId() == id) {
+			return (true);
+		}
+	}
+	return (false);
+}
+
 std::vector<boost::shared_ptr<NetworkClient>> &Server::getClients() noexcept
 {
 	return (this->clients);
@@ -114,9 +125,9 @@ void Server::sendLol()
 	struct NetworkMessage::Header header;
 	std::memset(&header, 0, sizeof(struct NetworkMessage::Header));
 	header.to = 1;
-	header.from = 2;
-	header.type = NetworkMessage::Header::MessageType::TYPE_LOGIN;
-	header.size = sizeof(struct NetworkMessage::MsgLogin);
+	header.from = 1;
+	header.type = NetworkMessage::Header::MessageType::TYPE_CALL;
+	header.size = sizeof(struct NetworkMessage::MsgCall);
 	NetworkMessage msg(header);
 	struct NetworkMessage::MsgLogin a;
 	std::memset(&a, 0, sizeof(struct NetworkMessage::MsgLogin));
