@@ -9,6 +9,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 #include "voice.hpp"
+#include "encode.hpp"
 
 int main(int argc, char * const *argv)
 {
@@ -20,12 +21,19 @@ int main(int argc, char * const *argv)
 
 
 	Voice ss;
+	EncoderSystem es;
+	unsigned char *before;
+	unsigned char *after;
+	if (!es.encoderCreate() || !es.decoderCreate())
+		return (-1);
 	ss.initPa();
 	ss.initParams();
 	ss.initStream();
 	while (1) {
+		before = es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
+		after = es.decode(before, es.getEncodeLen());
+		ss.writeOnStream(after);
 		ss.readFromStream();
-		ss.writeOnStream(ss.getReadBuffer());
 	}
 	return EXIT_SUCCESS;
 }

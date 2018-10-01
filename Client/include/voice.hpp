@@ -16,11 +16,11 @@
 	#include <unistd.h>
 
 	const int NUM_CHANNELS = 2;
-	const int SAMPLE_RATE = 4000;
+	const double SAMPLE_RATE = 4000;
 	const int FRAMES_PER_BUFFER = 1024;
 	const int SAMPLE_SIZE = 3;
 	const int FRAME_SIZE = 960;
-	const PaSampleFormat PA_SAMPLE_TYPE = paInt24;
+	const PaSampleFormat PA_SAMPLE_TYPE = paInt16;
 
 	class Voice {
  		private:

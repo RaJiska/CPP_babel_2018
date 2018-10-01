@@ -15,6 +15,7 @@ SET (SRCS
 	"${SOURCE_DIR}/main.cpp"
 	"${SOURCE_DIR}/mainwindow.cpp"
 	"${SOURCE_DIR}/voice.cpp"
+	"${SOURCE_DIR}/encode.cpp"
 )
 
 include_directories(${SOURCE_DIR}/include)
