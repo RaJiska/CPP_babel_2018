@@ -52,6 +52,7 @@ class NetworkMessage {
 	~NetworkMessage() = default;
 
 	const struct NetworkMessage::Header *headerFromData() const noexcept;
+	void setHeader(struct NetworkMessage::Header &header) noexcept;
 	struct NetworkMessage::Header &getHeader();
 
 	void setData(const unsigned char *data, size_t sz) noexcept;

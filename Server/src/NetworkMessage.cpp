@@ -35,6 +35,11 @@ const unsigned char *NetworkMessage::getData() const noexcept
 	return (&this->data[0]);
 }
 
+void NetworkMessage::setHeader(struct NetworkMessage::Header &header) noexcept
+{
+	this->header = header;
+}
+
 struct NetworkMessage::Header &NetworkMessage::getHeader()
 {
 	return(this->header);
