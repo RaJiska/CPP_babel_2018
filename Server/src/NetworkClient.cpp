@@ -85,8 +85,6 @@ void NetworkClient::sendMessage(NetworkMessage &msg) noexcept
 void NetworkClient::handleWrite(
 	const boost::system::error_code &err) noexcept
 {
-	if (err)
-		this->disconnect(err.message());
 }
 
 void NetworkClient::disconnect(const std::string &reason) noexcept

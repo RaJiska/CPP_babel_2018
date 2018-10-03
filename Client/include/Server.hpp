@@ -21,6 +21,7 @@ class Server {
 	private:
 	void sendMessage(NetworkMessage &msg) noexcept;
 	void readMessage(NetworkMessage &msg) noexcept;
+	void readNBytes(QByteArray &arr, qint64 nBytes) noexcept;
 
 	QTcpSocket socket;
 	unsigned long long int clientId;
