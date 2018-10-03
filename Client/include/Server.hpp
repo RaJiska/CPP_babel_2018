@@ -20,7 +20,7 @@ class Server {
 
 	private:
 	void sendMessage(NetworkMessage &msg) noexcept;
-	void readMessage() noexcept;
+	void readMessage(NetworkMessage &msg) noexcept;
 
 	QTcpSocket socket;
 	unsigned long long int clientId;

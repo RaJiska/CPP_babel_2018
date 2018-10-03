@@ -37,7 +37,7 @@ void Server::sendMessage(NetworkMessage &msg) noexcept
 	this->socket.write((const char *) &header,
 		sizeof(struct NetworkMessage::Header));
 	this->socket.write((const char *) msg.getData(), msg.getHeader().size);
-	this->socket.waitForBytesWritten
+	this->socket.waitForBytesWritten();
 }
 
 void Server::readMessage(NetworkMessage &msg) noexcept
