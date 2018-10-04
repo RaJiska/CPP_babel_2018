@@ -11,6 +11,7 @@
 #include "voice.hpp"
 #include "encode.hpp"
 #include <QtNetwork>
+#include "Server.hpp"
 
 int main(int argc, char * const *argv)
 {
@@ -19,13 +20,10 @@ int main(int argc, char * const *argv)
 	w.show();
 
 	return a.exec(); */
-
-	/*
-	QTcpSocket s;
-	s.connectToHost("127.0.0.1", 1111);
-	std::cout << QString(s.read(10)).toStdString() << std::endl;
+	Server s("127.0.0.1", 1111);
+	s.sendLoginMsg("Hello");
 	return 0;
-	*/
+	/*
 	Voice ss;
 	EncoderSystem es;
 	unsigned char *before;
@@ -41,5 +39,6 @@ int main(int argc, char * const *argv)
 		ss.writeOnStream(after);
 		ss.readFromStream();
 	}
+	*/
 	return EXIT_SUCCESS;
 }

@@ -22,7 +22,7 @@ Server::~Server()
 	this->socket.disconnect();
 }
 
-bool Server::sendLoginMsg(const std::string &name) noexcept
+NetworkMessage Server::sendLoginMsg(const std::string &name) noexcept
 {
 	NetworkMessage msg;
 	struct NetworkMessage::Header &header = msg.getHeader();
@@ -32,8 +32,45 @@ bool Server::sendLoginMsg(const std::string &name) noexcept
 	header.size = sizeof(struct NetworkMessage::MsgLogin);
 	struct NetworkMessage::MsgLogin mlogin;
 	std::strcpy(&mlogin.name[0], name.c_str());
-	msg.setData((const unsigned char *) &mlogin,
-		sizeof(struct NetworkMessage::MsgLogin));
+	msg.setData((const unsigned char *) &mlogin, header.size);
+	this->sendMessage(msg);
+	return (this->readMessage());
+}
+
+NetworkMessage Server::sendLogoutMsg() noexcept
+{
+	NetworkMessage msg;
+	struct NetworkMessage::Header &header = msg.getHeader();
+	header.from = 0;
+	header.to = 0;
+	header.type = NetworkMessage::Header::MessageType::TYPE_LOGOUT;
+	header.size = sizeof(struct NetworkMessage::MsgLogout);
+	this->sendMessage(msg);
+	return (this->readMessage());
+}
+
+void Server::sendCallMsg(unsigned long long int target) noexcept
+{
+	NetworkMessage msg;
+	struct NetworkMessage::Header &header = msg.getHeader();
+	header.from = 0;
+	header.to = target;
+	header.type = NetworkMessage::Header::MessageType::TYPE_CALL;
+	header.size = sizeof(struct NetworkMessage::MsgCall);
+	struct NetworkMessage::MsgCall mcall;
+	/* set IP address */
+	msg.setData((const unsigned char *) &mcall, header.size);
+	this->sendMessage(msg);
+}
+
+void Server::sendHangupMsg(unsigned long long int target) noexcept
+{
+	NetworkMessage msg;
+	struct NetworkMessage::Header &header = msg.getHeader();
+	header.from = 0;
+	header.to = target;
+	header.type = NetworkMessage::Header::MessageType::TYPE_HANGUP;
+	header.size = 0;
 	this->sendMessage(msg);
 }
 
@@ -46,15 +83,17 @@ void Server::sendMessage(NetworkMessage &msg) noexcept
 	this->socket.waitForBytesWritten();
 }
 
-void Server::readMessage(NetworkMessage &msg) noexcept
+NetworkMessage Server::readMessage() noexcept
 {
 	QByteArray buf;
 	this->readNBytes(buf, sizeof(struct NetworkMessage::Header));
+	NetworkMessage msg;
 	std::memcpy(&msg.getHeader(),
 		buf.data(), sizeof(struct NetworkMessage::Header));
 	buf.clear();
 	this->readNBytes(buf, msg.getHeader().size);
 	msg.setData((const unsigned char *) buf.data(), msg.getHeader().size);
+	return (msg);
 }
 
 void Server::readNBytes(QByteArray &arr, qint64 nBytes) noexcept

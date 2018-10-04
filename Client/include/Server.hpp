@@ -16,11 +16,14 @@ class Server {
 	Server(const std::string &address, uint16_t port);
 	~Server();
 
-	bool sendLoginMsg(const std::string &name) noexcept;
+	NetworkMessage sendLoginMsg(const std::string &name) noexcept;
+	NetworkMessage sendLogoutMsg() noexcept;
+	void sendCallMsg(unsigned long long int target) noexcept;
+	void sendHangupMsg(unsigned long long int target) noexcept;
 
 	private:
 	void sendMessage(NetworkMessage &msg) noexcept;
-	void readMessage(NetworkMessage &msg) noexcept;
+	NetworkMessage readMessage() noexcept;
 	void readNBytes(QByteArray &arr, qint64 nBytes) noexcept;
 
 	QTcpSocket socket;
