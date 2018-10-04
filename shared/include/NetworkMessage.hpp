@@ -5,6 +5,9 @@
 ** NetworkMessage
 */
 
+/// \file NetworkMessage.hpp
+/// \brief Include file for the network messages
+
 #ifndef NETWORKMESSAGE_HPP_
 	#define NETWORKMESSAGE_HPP_
 
@@ -47,15 +50,48 @@ class NetworkMessage {
 		char address[32];
 	};
 
+	/// \brief
+	/// Constructor of the class NetworkMessage
+	/// \param None
 	NetworkMessage();
+
+	/// \brief
+	/// Constructor of the class NetworkMessage
+	/// \param header : base header
 	NetworkMessage(const struct NetworkMessage::Header &header);
+
+	/// \brief
+	/// Destructor of the class NetworkMessage
+	/// \param None
 	~NetworkMessage() = default;
 
+	/// \brief
+	/// Retrieve NetworkMessage::Header from the stored data
+	/// \param None
+	/// \return The extracted header as a NetworkMessage::Header *
 	const struct NetworkMessage::Header *headerFromData() const noexcept;
+
+	/// \brief
+	/// Sets this->header
+	/// \param header : Header to be copied
 	void setHeader(struct NetworkMessage::Header &header) noexcept;
+
+	/// \brief
+	/// Gets this->header
+	/// \param None
+	/// \return A reference to the header structure this->header
 	struct NetworkMessage::Header &getHeader();
 
+	/// \brief
+	/// Copies data of size sz to this->data
+	/// \param data : to be copied
+	/// \param sz : size that should be copied
 	void setData(const unsigned char *data, size_t sz) noexcept;
+
+	/// \brief
+	/// Gets this->data
+	/// \param None
+	/// \return A pointer to the stored data
 	const unsigned char *getData() const noexcept;
 
 	private:
