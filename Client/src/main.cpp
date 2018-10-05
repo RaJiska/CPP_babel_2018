@@ -20,10 +20,10 @@ int main(int argc, char * const *argv)
 	w.show();
 
 	return a.exec(); */
-	Server s("127.0.0.1", 1111);
+	/* Server s("127.0.0.1", 1111);
 	s.sendLoginMsg("Hello");
-	return 0;
-	/*
+	return 0; */
+	
 	Voice ss;
 	EncoderSystem es;
 	unsigned char *before;
@@ -34,11 +34,11 @@ int main(int argc, char * const *argv)
 	ss.initParams();
 	ss.initStream();
 	while (1) {
-		before = es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
-		after = es.decode(before, es.getEncodeLen());
-		ss.writeOnStream(after);
+		/* before = es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
+		after = es.decode(before, es.getEncodeLen()); */
+		ss.writeOnStream(ss.getReadBuffer());
 		ss.readFromStream();
 	}
-	*/
+	
 	return EXIT_SUCCESS;
 }

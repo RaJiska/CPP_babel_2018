@@ -14,9 +14,9 @@
 	#include <iostream>
 
 	const int FRAME_SIZE_CODE = 960;
-	const int SAMPLE_RATE_CODE = 48000;
+	const int SAMPLE_RATE_CODE = 8000;
 	const int CHANNELS_CODE = 2;
-	const int MAX_FRAME_SIZE_CODE = 2*960;
+	const int MAX_FRAME_SIZE_CODE = 6*960;
 
 	class	EncoderSystem {
 		private:

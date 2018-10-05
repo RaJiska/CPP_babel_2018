@@ -13,6 +13,10 @@ EncoderSystem::EncoderSystem()
 
 EncoderSystem::~EncoderSystem()
 {
+	if (_encode)
+		opus_encoder_destroy(_encode);
+	if (_decode)
+		opus_decoder_destroy(_decode);
 }
 
 bool	EncoderSystem::encoderCreate()
