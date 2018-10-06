@@ -70,6 +70,8 @@ class Server {
 	/// \return a std::vector containing all of the clients
 	std::vector<boost::shared_ptr<NetworkClient>> &getClients() noexcept;
 
+	void sendLol();
+
 	private:
 
 	/// \brief

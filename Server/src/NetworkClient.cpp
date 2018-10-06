@@ -70,12 +70,14 @@ void NetworkClient::handleReadData(
 	}
 }
 
-void NetworkClient::sendMessage(NetworkMessage &msg) noexcept
+void NetworkClient::sendMessage(NetworkMessage &msg, bool noHeader)
+	noexcept
 {
-	boost::asio::async_write(this->socket, boost::asio::buffer(
+	if (!noHeader)
+		boost::asio::async_write(this->socket, boost::asio::buffer(
 		boost::asio::buffer(&msg.getHeader(), sizeof(msg.getHeader()))),
 		boost::bind(&NetworkClient::handleWrite, this,
-			boost::asio::placeholders::error));
+		boost::asio::placeholders::error));
 	boost::asio::async_write(this->socket, boost::asio::buffer(
 		boost::asio::buffer(msg.getData(), msg.getHeader().size)),
 		boost::bind(&NetworkClient::handleWrite, this,
@@ -188,6 +190,40 @@ void NetworkClient::handleMsgHangup(NetworkMessage &msg) noexcept
 	respHeader.size = 0;
 	NetworkMessage respMsg(respHeader);
 	this->sendMessage(respMsg);
+}
+
+void NetworkClient::handleMsgList(NetworkMessage &msg) noexcept
+{
+	struct NetworkMessage::Header respHeader;
+	struct NetworkMessage::MsgList *data =
+		(struct NetworkMessage::MsgList *) msg.getData();
+	if (!this->client.getLoggedIn()) {
+		respHeader.from = 0;
+		respHeader.to = this->id;
+		respHeader.type =
+			NetworkMessage::Header::MessageType::TYPE_ERROR;
+		respHeader.size = 0;
+		NetworkMessage respMsg(respHeader);
+		this->sendMessage(respMsg);
+	}
+	else {
+		respHeader.from = this->id;
+		respHeader.to = this->id;
+		respHeader.type =
+			NetworkMessage::Header::MessageType::TYPE_LIST;
+		data->nb = this->server.getClients().size();
+		NetworkMessage respMsg(respHeader);
+		this->sendMessage(respMsg);
+		for (auto it : this->server.getClients()) {
+			struct NetworkMessage::MsgList_Client *cli =
+				(struct NetworkMessage::MsgList_Client *)
+				respMsg.getData();
+			cli->id = it->getId();
+			std::strncpy(cli->name,
+				it->getClient().getName().c_str(), 31)[31] = 0;
+			//this->sendMessage(respMsg, true);
+		}
+	}
 }
 
 void NetworkClient::broadcastMsg(NetworkMessage &msg) const noexcept

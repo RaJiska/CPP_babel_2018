@@ -65,7 +65,7 @@ class NetworkClient {
 	/// \brief
 	/// Sends a NetworkMessage
 	/// \param msg : the NetworkMessage to be sent
-	void sendMessage(NetworkMessage &msg) noexcept;
+	void sendMessage(NetworkMessage &msg, bool noHeader = false) noexcept;
 
 	/// \brief
 	/// Disconnect the current NetworkClient
@@ -97,6 +97,11 @@ class NetworkClient {
 	/// Handler function used when an user tries to end the call
 	/// \param msg : the NetworkMessage the client sent to end the call
 	void handleMsgHangup(NetworkMessage &msg) noexcept;
+
+	/// \brief
+	/// Handler function used when an user tries to get the list of users
+	/// \param msg : the NetworkMessage the client sent to get the list
+	void handleMsgList(NetworkMessage &msg) noexcept;
 
 	/// \brief
 	/// Sends the message to all logged in users

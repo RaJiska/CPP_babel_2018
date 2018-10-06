@@ -120,14 +120,13 @@ std::vector<boost::shared_ptr<NetworkClient>> &Server::getClients() noexcept
 
 void Server::sendLol()
 {
-	/*
 	std::cout << "Send" << std::endl;
 	struct NetworkMessage::Header header;
 	std::memset(&header, 0, sizeof(struct NetworkMessage::Header));
 	header.to = 1;
 	header.from = 1;
-	header.type = NetworkMessage::Header::MessageType::TYPE_CALL;
-	header.size = sizeof(struct NetworkMessage::MsgCall);
+	header.type = NetworkMessage::Header::MessageType::TYPE_LOGIN;
+	header.size = sizeof(struct NetworkMessage::MsgLogin);
 	NetworkMessage msg(header);
 	struct NetworkMessage::MsgLogin a;
 	std::memset(&a, 0, sizeof(struct NetworkMessage::MsgLogin));
@@ -137,5 +136,4 @@ void Server::sendLol()
 	for (auto it : this->clients) {
 		it->sendMessage(msg);
 	}
-	*/
 }
