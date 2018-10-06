@@ -34,8 +34,8 @@ int main(int argc, char * const *argv)
 	ss.initParams();
 	ss.initStream();
 	while (1) {
-		/* before = es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
-		after = es.decode(before, es.getEncodeLen()); */
+		es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
+		es.decode(ss.getReadBuffer(), es.getEncodeLen());
 		ss.writeOnStream(ss.getReadBuffer());
 		ss.readFromStream();
 	}
