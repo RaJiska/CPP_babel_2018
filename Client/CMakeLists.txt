@@ -54,6 +54,6 @@ QT5_WRAP_UI(UI_GENERATED_HEADERS ${Client_UI})
 #QT5_WRAP_CPP(Client_HEADERS_MOC ${HuggleLite_HEADERS})
 
 
-add_executable(babel_client ${Client_SOURCES} ${Client_HEADERS})
+add_executable(babel_client ${Client_SOURCES} ${Client_HEADERS} ${UI_GENERATED_HEADERS})
 qt5_use_modules(babel_client Core Widgets Network)
 target_link_libraries(babel_client ${CONAN_LIBS})
