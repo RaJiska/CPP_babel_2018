@@ -74,6 +74,31 @@ void Server::sendHangupMsg(unsigned long long int target) noexcept
 	this->sendMessage(msg);
 }
 
+void Server::sendListMsg() noexcept
+{
+	NetworkMessage msg;
+	struct NetworkMessage::Header &header = msg.getHeader();
+	header.from = 0;
+	header.to = 0;
+	header.type = NetworkMessage::Header::MessageType::TYPE_LIST;
+	header.size = 0;
+	this->sendMessage(msg);
+	msg = this->readMessage();
+	struct NetworkMessage::MsgList *list =
+		(struct NetworkMessage::MsgList *) msg.getData();
+	for (unsigned int it = 0; it < list->nb; ++it) {
+		QByteArray arr;
+		struct NetworkMessage::MsgList_Client sCliList;
+		this->readNBytes(arr,
+			sizeof(struct NetworkMessage::MsgList_Client));
+		std::memcpy(&sCliList, arr.data(), arr.size());
+		struct Server::Client client;
+		client.id = sCliList.id;
+		client.name = std::string(sCliList.name);
+		this->clientsList.push_back(client);
+	}
+}
+
 void Server::sendMessage(NetworkMessage &msg) noexcept
 {
 	struct NetworkMessage::Header header = msg.getHeader();

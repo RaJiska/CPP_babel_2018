@@ -118,7 +118,8 @@ void NetworkClient::handleMsgLogin(NetworkMessage &msg) noexcept
 			<< " (" << this->id << ") logged in" << std::endl;
 		rHeader.type = NetworkMessage::Header::MessageType::TYPE_LOGIN;
 		rHeader.size = sizeof(struct NetworkMessage::MsgLogin);
-		this->broadcastMsg(msg);
+		this->sendMessage(msg);
+		//this->broadcastMsg(msg);
 	}
 	catch (std::exception &e) {
 		NetworkMessage rMsg(rHeader);
@@ -142,7 +143,8 @@ void NetworkClient::handleMsgLogout(NetworkMessage &msg) noexcept
 	}
 	rHeader.size = 0;
 	NetworkMessage rMsg(rHeader);
-	this->broadcastMsg(rMsg);
+	this->sendMessage(rMsg);
+	//this->broadcastMsg(rMsg);
 }
 
 void NetworkClient::handleMsgCall(NetworkMessage &msg) noexcept
@@ -211,6 +213,7 @@ void NetworkClient::handleMsgList(NetworkMessage &msg) noexcept
 		respHeader.to = this->id;
 		respHeader.type =
 			NetworkMessage::Header::MessageType::TYPE_LIST;
+		respHeader.size = sizeof(struct NetworkMessage::MsgList);
 		data->nb = this->server.getClients().size();
 		NetworkMessage respMsg(respHeader);
 		this->sendMessage(respMsg);

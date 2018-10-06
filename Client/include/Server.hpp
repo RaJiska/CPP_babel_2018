@@ -13,6 +13,12 @@
 
 class Server {
 	public:
+	struct Client
+	{
+		unsigned long long int id;
+		std::string name;
+	};
+
 	Server(const std::string &address, uint16_t port);
 	~Server();
 
@@ -20,6 +26,7 @@ class Server {
 	NetworkMessage sendLogoutMsg() noexcept;
 	void sendCallMsg(unsigned long long int target) noexcept;
 	void sendHangupMsg(unsigned long long int target) noexcept;
+	void sendListMsg() noexcept;
 
 	private:
 	void sendMessage(NetworkMessage &msg) noexcept;
@@ -29,6 +36,7 @@ class Server {
 	QTcpSocket socket;
 	unsigned long long int clientId;
 	NetworkMessage response;
+	std::vector<Client> clientsList;
 };
 
 #endif /* !SERVER_HPP_ */
