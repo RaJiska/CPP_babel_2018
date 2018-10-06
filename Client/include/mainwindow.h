@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow
 
     public slots:
         void PressLogin();
+        void PressContact();
 
     private:
         Ui::MainWindow *ui;
