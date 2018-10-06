@@ -4,7 +4,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    this->server = new Server("127.0.0.1", 1111);
     ui->setupUi(this);
     QObject::connect(ui->Login, SIGNAL(clicked()), this, SLOT (PressLogin()));
 }
@@ -16,5 +15,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::PressLogin()
 {
+    this->server = new Server(ui->IpField->text().toStdString(), ui->PortField->text().toInt());
     this->server->sendLoginMsg(ui->LoginField->text().toStdString().substr(0,31));
 }

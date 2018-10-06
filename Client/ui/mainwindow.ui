@@ -18,7 +18,25 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QLineEdit" name="LoginField"/>
+       <widget class="QLineEdit" name="LoginField">
+        <property name="placeholderText">
+         <string>pseudo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="IpField">
+        <property name="placeholderText">
+         <string>ip</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="PortField">
+        <property name="placeholderText">
+         <string>port</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="Login">
@@ -30,6 +48,10 @@
         </property>
        </widget>
       </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLineEdit" name="Contactfield"/>
       </item>
