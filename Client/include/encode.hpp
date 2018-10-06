@@ -9,7 +9,7 @@
 	#define ENCODE_HPP_
 
 	#include <opus_types.h>
-	#include  <opus.h>
+	#include <opus.h>
 	#include <cstring>
 	#include <iostream>
 

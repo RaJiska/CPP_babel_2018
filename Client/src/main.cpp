@@ -13,17 +13,18 @@
 #include <QtNetwork>
 #include "Server.hpp"
 
-int main(int argc, char * const *argv)
+int main(int argc, char **argv)
 {
-	/* QApplication a(argc, argv);
+	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();
 
-	return a.exec(); */
+	return a.exec();
 	/* Server s("127.0.0.1", 1111);
 	s.sendLoginMsg("Hello");
 	return 0; */
 	
+	/*
 	Voice ss;
 	EncoderSystem es;
 	unsigned char *before;
@@ -39,6 +40,6 @@ int main(int argc, char * const *argv)
 		ss.writeOnStream(ss.getReadBuffer());
 		ss.readFromStream();
 	}
-	
+	*/
 	return EXIT_SUCCESS;
 }

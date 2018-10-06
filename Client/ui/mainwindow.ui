@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
-    <height>352</height>
+    <width>527</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,15 +18,25 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QLineEdit" name="lineEdit_2"/>
+       <widget class="QLineEdit" name="LoginField"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="Login">
         <property name="text">
          <string>Login</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="Contactfield"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="Contact">
+        <property name="text">
+         <string>Add Contact</string>
         </property>
        </widget>
       </item>
@@ -44,14 +54,14 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="Call">
         <property name="text">
          <string>Call</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="HangOut">
         <property name="text">
          <string>Hang out</string>
         </property>
@@ -66,7 +76,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>462</width>
+     <width>527</width>
      <height>20</height>
     </rect>
    </property>

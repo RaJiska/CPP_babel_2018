@@ -24,10 +24,18 @@ CONFIG += c++11
 
 SOURCES += \
         src/main.cpp \
-        src/mainwindow.cpp
+        src/mainwindow.cpp \
+        src/encode.cpp \
+        src/Server.cpp \
+        src/voice.cpp \
+        ../shared/src/NetworkMessage.cpp
 
-HEADERS += \
-        include/mainwindow.h
+INCLUDEPATH += ../shared/include
+INCLUDEPATH += include/
+INCLUDEPATH += /usr/include/opus
+INCLUDEPATH += /usr/include/x86_64-linux-gnu/qt5/QtNetwork
+
+LIBS += -lboost_system -lasound -ljack -lpthread -lportaudio
 
 FORMS += \
         ui/mainwindow.ui
