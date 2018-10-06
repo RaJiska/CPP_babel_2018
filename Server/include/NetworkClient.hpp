@@ -104,6 +104,11 @@ class NetworkClient {
 	void handleMsgList(NetworkMessage &msg) noexcept;
 
 	/// \brief
+	/// Handler function used when an user tries to send a voice packet
+	/// \param msg : the NetworkMessage the client sent to get the voice
+	void handleMsgVoice(NetworkMessage &msg) noexcept;
+
+	/// \brief
 	/// Sends the message to all logged in users
 	/// \param msg : the NetworkMessage to be propaged
 	void broadcastMsg(NetworkMessage &msg) const noexcept;

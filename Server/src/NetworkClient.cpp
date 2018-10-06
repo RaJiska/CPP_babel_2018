@@ -221,8 +221,17 @@ void NetworkClient::handleMsgList(NetworkMessage &msg) noexcept
 			cli->id = it->getId();
 			std::strncpy(cli->name,
 				it->getClient().getName().c_str(), 31)[31] = 0;
-			//this->sendMessage(respMsg, true);
+			this->sendMessage(respMsg, true);
 		}
+	}
+}
+
+void NetworkClient::handleMsgVoice(NetworkMessage &msg) noexcept
+{
+	if (this->server.clientExistsById(msg.getHeader().to)) {
+		auto client = this->server.clientById(msg.getHeader().to);
+		if (client->getClient().getLoggedIn())
+			client->sendMessage(msg);
 	}
 }
 
