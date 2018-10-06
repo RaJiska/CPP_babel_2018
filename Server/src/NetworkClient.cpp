@@ -25,6 +25,8 @@ NetworkClient::NetworkClient(Server &server,
 	std::bind(&NetworkClient::handleMsgCall, this, std::placeholders::_1);
 	this->msgMap[NetworkMessage::Header::TYPE_HANGUP] =
 	std::bind(&NetworkClient::handleMsgHangup, this, std::placeholders::_1);
+	this->msgMap[NetworkMessage::Header::TYPE_LIST] =
+	std::bind(&NetworkClient::handleMsgList, this, std::placeholders::_1);
 }
 
 NetworkClient::~NetworkClient()
