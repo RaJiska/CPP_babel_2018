@@ -53,12 +53,9 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLineEdit" name="Contactfield"/>
-      </item>
-      <item>
        <widget class="QPushButton" name="Contact">
         <property name="text">
-         <string>Add Contact</string>
+         <string>Refresh</string>
         </property>
        </widget>
       </item>
