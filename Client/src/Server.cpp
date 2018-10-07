@@ -29,8 +29,8 @@ Server::Server(const std::string &address, uint16_t port) :
 	std::bind(&Server::handleCallMsg, this, std::placeholders::_1);
 	this->msgMap[NetworkMessage::Header::TYPE_HANGUP] =
 	std::bind(&Server::handleHangupMsg, this, std::placeholders::_1);
-	this->msgMap[NetworkMessage::Header::TYPE_LIST] =
-	std::bind(&Server::handleListMsg, this, std::placeholders::_1);
+	this->msgMap[NetworkMessage::Header::TYPE_QUERY] =
+	std::bind(&Server::handleQueryMsg, this, std::placeholders::_1);
 	this->start();
 }
 
@@ -81,7 +81,6 @@ void Server::sendCallMsg(unsigned long long int target) noexcept
 	header.type = NetworkMessage::Header::MessageType::TYPE_CALL;
 	header.size = sizeof(struct NetworkMessage::MsgCall);
 	struct NetworkMessage::MsgCall mcall;
-	/* set IP address */
 	msg.setData((const unsigned char *) &mcall, header.size);
 	this->sendMessage(msg);
 }
@@ -105,31 +104,21 @@ void Server::handleHangupMsg(NetworkMessage msg) noexcept
 {
 }
 
-void Server::sendListMsg() noexcept
+void Server::sendQueryMsg(unsigned long long int id) noexcept
 {
 	NetworkMessage msg;
 	struct NetworkMessage::Header &header = msg.getHeader();
 	header.from = 0;
 	header.to = 0;
-	header.type = NetworkMessage::Header::MessageType::TYPE_LIST;
-	header.size = 0;
+	header.type = NetworkMessage::Header::MessageType::TYPE_QUERY;
+	header.size = sizeof(struct NetworkMessage::MsgQuery);
+	struct NetworkMessage::MsgQuery *data =
+		(struct NetworkMessage::MsgQuery *) msg.getData();
+	data->id = id;
 	this->sendMessage(msg);
-	//msg = this->readMessage();
-	struct NetworkMessage::MsgList *list =
-		(struct NetworkMessage::MsgList *) msg.getData();
-	for (unsigned int it = 0; it < list->nb; ++it) {
-		//QByteArray arr;
-		struct NetworkMessage::MsgList_Client sCliList;
-		//this->readNBytes(arr, sizeof(struct NetworkMessage::MsgList_Client));
-		//std::memcpy(&sCliList, arr.data(), arr.size());
-		struct Server::Client client;
-		client.id = sCliList.id;
-		client.name = std::string(sCliList.name);
-		this->clientsList.push_back(client);
-	}
 }
 
-void Server::handleListMsg(NetworkMessage msg) noexcept
+void Server::handleQueryMsg(NetworkMessage msg) noexcept
 {
 }
 

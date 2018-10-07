@@ -24,7 +24,7 @@ class NetworkMessage {
 			TYPE_LOGOUT,
 			TYPE_CALL,
 			TYPE_HANGUP,
-			TYPE_LIST,
+			TYPE_QUERY,
 			TYPE_VOICE
 		};
 		uint64_t to;
@@ -51,12 +51,7 @@ class NetworkMessage {
 		char address[32];
 	};
 
-	struct MsgList
-	{
-		unsigned int nb;
-	};
-
-	struct MsgList_Client
+	struct MsgQuery
 	{
 		unsigned long long int id;
 		char name[32];

@@ -25,8 +25,8 @@ NetworkClient::NetworkClient(Server &server,
 	std::bind(&NetworkClient::handleMsgCall, this, std::placeholders::_1);
 	this->msgMap[NetworkMessage::Header::TYPE_HANGUP] =
 	std::bind(&NetworkClient::handleMsgHangup, this, std::placeholders::_1);
-	this->msgMap[NetworkMessage::Header::TYPE_LIST] =
-	std::bind(&NetworkClient::handleMsgList, this, std::placeholders::_1);
+	this->msgMap[NetworkMessage::Header::TYPE_QUERY] =
+	std::bind(&NetworkClient::handleMsgQuery, this, std::placeholders::_1);
 }
 
 NetworkClient::~NetworkClient()
@@ -200,39 +200,25 @@ void NetworkClient::handleMsgHangup(NetworkMessage &msg) noexcept
 	this->sendMessage(respMsg);
 }
 
-void NetworkClient::handleMsgList(NetworkMessage &msg) noexcept
+void NetworkClient::handleMsgQuery(NetworkMessage &msg) noexcept
 {
 	struct NetworkMessage::Header respHeader;
-	struct NetworkMessage::MsgList *data =
-		(struct NetworkMessage::MsgList *) msg.getData();
-	if (!this->client.getLoggedIn()) {
-		respHeader.from = 0;
-		respHeader.to = this->id;
-		respHeader.type =
-			NetworkMessage::Header::MessageType::TYPE_ERROR;
-		respHeader.size = 0;
-		NetworkMessage respMsg(respHeader);
-		this->sendMessage(respMsg);
-	}
+	struct NetworkMessage::MsgQuery *data =
+		(struct NetworkMessage::MsgQuery *) msg.getData();
+	respHeader.from = 0;
+	respHeader.to = this->id;
+	respHeader.type = NetworkMessage::Header::TYPE_QUERY;
+	respHeader.size = sizeof(struct NetworkMessage::MsgQuery);
+	if (!this->server.clientExistsById(data->id))
+		data->id = 0;
 	else {
-		respHeader.from = this->id;
-		respHeader.to = this->id;
-		respHeader.type =
-			NetworkMessage::Header::MessageType::TYPE_LIST;
-		respHeader.size = sizeof(struct NetworkMessage::MsgList);
-		data->nb = this->server.getClients().size();
-		NetworkMessage respMsg(respHeader);
-		this->sendMessage(respMsg);
-		for (auto it : this->server.getClients()) {
-			struct NetworkMessage::MsgList_Client *cli =
-				(struct NetworkMessage::MsgList_Client *)
-				respMsg.getData();
-			cli->id = it->getId();
-			std::strncpy(cli->name,
-				it->getClient().getName().c_str(), 31)[31] = 0;
-			this->sendMessage(respMsg, true);
-		}
+		std::strncpy(data->name,
+			this->server.clientById(
+				data->id)->getClient().getName().c_str(),
+			31)[31] = 0;
 	}
+	NetworkMessage respMsg(msg);
+	this->sendMessage(msg);
 }
 
 void NetworkClient::handleMsgVoice(NetworkMessage &msg) noexcept

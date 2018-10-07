@@ -99,9 +99,9 @@ class NetworkClient {
 	void handleMsgHangup(NetworkMessage &msg) noexcept;
 
 	/// \brief
-	/// Handler function used when an user tries to get the list of users
-	/// \param msg : the NetworkMessage the client sent to get the list
-	void handleMsgList(NetworkMessage &msg) noexcept;
+	/// Handler function used when an user tries to query a user
+	/// \param msg : the NetworkMessage the client sent to query
+	void handleMsgQuery(NetworkMessage &msg) noexcept;
 
 	/// \brief
 	/// Handler function used when an user tries to send a voice packet
