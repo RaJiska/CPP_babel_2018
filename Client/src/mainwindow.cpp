@@ -84,6 +84,10 @@ void MainWindow::PressCall()
 
 void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
 {
+	for (auto a : this->clientsList) {
+		if (std::string(a.name) == msg.name && a.id == msg.id)
+			return ;
+	}
 	this->clientsList.push_back(msg);
 	ui->listWidget->addItem(QString::fromStdString(std::string(msg.name)));
 }
