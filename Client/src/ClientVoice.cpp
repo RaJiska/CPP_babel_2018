@@ -10,6 +10,24 @@
 ClientVoice::ClientVoice(const std::string &addr, uint16_t port) :
 	IVoiceStream(), socket(this->io_service)
 {
+	this->connect(addr, port);
+}
+
+ClientVoice::~ClientVoice()
+{
+}
+
+void ClientVoice::start() noexcept
+{
+	this->socket.async_send_to(boost::asio::buffer("START"),
+		*this->endpoint, boost::bind(&ClientVoice::handleWrite, this,
+			boost::asio::placeholders::error));
+	this->io_service.run();
+}
+
+void ClientVoice::connect(
+	const std::string &addr, uint16_t port) noexcept
+{
 	this->endpoint = new boost::asio::ip::udp::endpoint(
 		boost::asio::ip::address::from_string(addr), port);
 	socket.open(boost::asio::ip::udp::v4());
@@ -18,22 +36,16 @@ ClientVoice::ClientVoice(const std::string &addr, uint16_t port) :
 		boost::bind(&ClientVoice::handleRead, this,
 			boost::asio::placeholders::error,
 			boost::asio::placeholders::bytes_transferred));
-	this->socket.async_send_to(boost::asio::buffer(std::string("START"), 5),
-		*this->endpoint, boost::bind(&ClientVoice::handleWrite, this,
-			boost::asio::placeholders::error));
 }
 
-ClientVoice::~ClientVoice()
-{
-	this->socket.close();
-}
-
-void ClientVoice::start() noexcept
+void ClientVoice::disconnected() noexcept
 {
 	this->socket.async_send_to(boost::asio::buffer("END"),
 		*this->endpoint, boost::bind(&ClientVoice::handleWrite, this,
 			boost::asio::placeholders::error));
-	this->io_service.run();
+	this->connected = false;
+	this->io_service.stop();
+	this->socket.close();
 }
 
 void ClientVoice::setReadCallback(
@@ -58,9 +70,8 @@ void ClientVoice::handleRead(
 		this->connected = true;
 	else if (this->connected && nbytes >= 3 && !memcmp(this->readBuffer, "END", 3))
 		this->connected = false;
-	else {
-
-	}
+	else
+		this->readCallback(this->readBuffer, nbytes);
 }
 
 void ClientVoice::handleWrite(const boost::system::error_code &err) noexcept

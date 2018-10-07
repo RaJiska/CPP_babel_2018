@@ -11,7 +11,6 @@
 #include <iostream>
 #include <functional>
 #include <boost/bind.hpp>
-#include "voice.hpp"
 
 class IVoiceStream {
 	public:
@@ -19,6 +18,9 @@ class IVoiceStream {
 	virtual ~IVoiceStream() = default;
 
 	virtual void start() noexcept = 0;
+	virtual void connect(
+		const std::string &addr, uint16_t port) noexcept = 0;
+	virtual void disconnected() noexcept = 0;
 	virtual void setReadCallback(
 		std::function<void(unsigned char *, size_t)>) noexcept = 0;
 	virtual void writeData(

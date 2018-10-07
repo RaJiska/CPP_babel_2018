@@ -12,11 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->Contact->setEnabled(false);
     ui->listWidget->clear();
-    ui->HangOut->setEnabled(false);
+    ui->Hangup->setEnabled(false);
     this->server = nullptr;
     QObject::connect(ui->Login, SIGNAL(clicked()), this, SLOT (PressLogin()));
     QObject::connect(ui->Contact, SIGNAL(clicked()), this, SLOT (PressContact()));
-    QObject::connect(ui->HangOut, SIGNAL(clicked()), this, SLOT (PressHangOut()));
+    QObject::connect(ui->Hangup, SIGNAL(clicked()), this, SLOT (PressHangup()));
     QObject::connect(ui->Call, SIGNAL(clicked()), this, SLOT (PressCall()));
 }
 
@@ -63,11 +63,11 @@ void MainWindow::recieveVoice(unsigned char* buff, int size)
 	ss.readFromStream(buff);
 }
 
-void MainWindow::PressHangOut()
+void MainWindow::PressHangup()
 {
     this->onCall = false;
     ui->Call->setEnabled(true);
-    ui->HangOut->setEnabled(false);
+    ui->Hangup->setEnabled(false);
 }
 
 void MainWindow::PressCall()
@@ -76,7 +76,7 @@ void MainWindow::PressCall()
 	for (auto a : this->clientsList) {
 		if (std::string(a.name) == list[0]->text().toStdString()) {
 			this->server->sendCallMsg(a.id);
-			ui->HangOut->setEnabled(true);
+			ui->Hangup->setEnabled(true);
 			ui->Call->setEnabled(false);
 		}
 	}
@@ -99,9 +99,9 @@ void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
 	this->onCall = true;
 }
 
-void MainWindow::handleHangOut()
+void MainWindow::handleHangup()
 {
 	this->onCall = false;
 	ui->Call->setEnabled(true);
-	ui->HangOut->setEnabled(false);
+	ui->Hangup->setEnabled(false);
 }

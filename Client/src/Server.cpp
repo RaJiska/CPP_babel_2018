@@ -87,7 +87,7 @@ void Server::sendCallMsg(unsigned long long int target) noexcept
 
 void Server::handleCallMsg(NetworkMessage msg) noexcept
 {
-
+	this->window.handleCall(*(NetworkMessage::MsgCall *) msg.getData());
 }
 
 void Server::sendHangupMsg(unsigned long long int target) noexcept
@@ -103,6 +103,7 @@ void Server::sendHangupMsg(unsigned long long int target) noexcept
 
 void Server::handleHangupMsg(NetworkMessage msg) noexcept
 {
+	this->window.handleHangup();
 }
 
 void Server::sendQueryMsg(const std::string &name) noexcept

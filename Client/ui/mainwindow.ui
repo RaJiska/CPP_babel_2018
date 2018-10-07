@@ -77,7 +77,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="HangOut">
+       <widget class="QPushButton" name="Hangup">
         <property name="text">
          <string>Hang out</string>
         </property>

@@ -17,6 +17,8 @@ class ClientVoice : public IVoiceStream {
 	~ClientVoice();
 
 	void start() noexcept = 0;
+	void connect(const std::string &addr, uint16_t port) noexcept;
+	void disconnected() noexcept;
 	void setReadCallback(
 		std::function<void(unsigned char *, size_t)> f) noexcept = 0;
 	void writeData(

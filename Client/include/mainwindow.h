@@ -32,11 +32,11 @@ class MainWindow : public QMainWindow
         void PressContact();
         unsigned char *sendVoice();
         void recieveVoice(unsigned char* buf, int size);
-        void PressHangOut();
+        void PressHangup();
         void PressCall();
         void handleContact(NetworkMessage::MsgQuery &msg);
         void handleCall(NetworkMessage::MsgCall &msg);
-        void handleHangOut();
+        void handleHangup();
 
     private:
         Ui::MainWindow *ui;
