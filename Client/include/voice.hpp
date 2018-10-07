@@ -31,22 +31,93 @@
 			unsigned char	*_readBuffer;
 
 		public:
-			Voice();
-			~Voice();
-  			bool	initPa();
-  			bool	openStream();
-  			bool	startStream();
-  			bool	initStream();                                   
-  			bool	initParams() const;
-			bool	initInputParams();
-			bool	initOutputParams();
-			bool	initParams();
-			bool	writeOnStream(unsigned char *buff);
-			bool	readFromStream();
-			void	cleanReadBuffer();
-			int	getReadBufferSize() const;
-			unsigned char	*getReadBuffer() const;
 
+			/// \brief
+			/// Constructor of the class Voice
+			/// \param None
+			Voice();
+
+			/// \brief
+			/// Destructor of the class Voice
+			/// \param None
+			~Voice();
+
+			/// \brief
+			/// Initialises PortAudio
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+  			bool	initPa();
+
+			/// \brief
+			/// Opens the audio stream
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+  			bool	openStream();
+
+			/// \brief
+			/// Starts the audio stream
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+  			bool	startStream();
+
+			/// \brief
+			/// Opens and starts the audio stream
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+  			bool	initStream();
+
+			/// \brief
+			/// Initialise the input and output devices
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+  			bool	initParams() const;
+
+			/// \brief
+			/// Initialise the input devices
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+			bool	initInputParams();
+
+			/// \brief
+			/// Initialise the output devices
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+			bool	initOutputParams();
+
+			/// \brief
+			/// Initialise the input and output devices
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+			bool	initParams();
+
+			/// \brief
+			/// Writes on the audio stream
+			/// \param data : Buffer to write on
+			/// \return True uppon success, Fail otherwise
+			bool	writeOnStream(unsigned char *buff);
+
+			/// \brief
+			/// Reads from the audio stream
+			/// \param None
+			/// \return True uppon success, Fail otherwise
+			bool	readFromStream();
+
+			/// \brief
+			/// Cleans the read buffer
+			/// \param None
+			void	cleanReadBuffer();
+
+			/// \brief
+			/// Returns the length of the read buffer
+			/// \param None
+			/// \return The length of the read buffer
+			int	getReadBufferSize() const;
+
+			/// \brief
+			/// Gets this->_readBuffer
+			/// \param None
+			/// \return The read buffer
+			unsigned char	*getReadBuffer() const;
 };
 
 #endif /* !VOICE_HPP_ */

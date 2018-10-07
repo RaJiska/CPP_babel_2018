@@ -29,10 +29,35 @@
 		public:
 			EncoderSystem();
 			~EncoderSystem();
+
+			/// \brief
+			/// Creates the encoder for later use
+			/// \param None
 			bool	encoderCreate();
+
+			/// \brief
+			/// Creates the decoder for later use
+			/// \param None
 			bool	decoderCreate();
+
+			/// \brief
+			/// Encodes the data of specified size
+			/// \param data : Buffer to compress
+			/// \param size : Buffer's size
+			/// \return The encoded data
 			unsigned char*	encode(unsigned char *, int);
+
+			/// \brief
+			/// Decodes the data of specified size
+			/// \param data : Buffer to compress
+			/// \param size : Buffer's size
+			/// \return The decoded data
 			unsigned char*	decode(unsigned char *, int);
+
+			/// \brief
+			/// Gets this->_nbBytes
+			/// \param None
+			/// \return The encoded length
 			int	getEncodeLen() const;
 };
 
