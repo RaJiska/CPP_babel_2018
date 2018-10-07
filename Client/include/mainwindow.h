@@ -32,13 +32,14 @@ class MainWindow : public QMainWindow
     public slots:
         void PressLogin();
         void PressContact();
-        unsigned char *sendVoice();
+        void sendVoice(IVoiceStream *remote);
         void receiveVoice(unsigned char* buf, int size);
         void PressHangup();
         void PressCall();
         void handleContact(NetworkMessage::MsgQuery &msg);
         void handleCall(NetworkMessage::MsgCall &msg);
         void handleHangup();
+        void call(IVoiceStream *remote);
 
     private:
         Ui::MainWindow *ui;
@@ -51,7 +52,7 @@ class MainWindow : public QMainWindow
 	    EncoderSystem es;
         bool onCall = false;
         std::vector<NetworkMessage::MsgQuery> clientsList;
-        char target[32];
+        unsigned long long int target = 0;
 
 };
 

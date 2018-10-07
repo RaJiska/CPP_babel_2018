@@ -50,11 +50,12 @@ void MainWindow::PressLogin()
     if (ui->LoginField->text().toStdString().empty() || ui->IpField->text().toStdString().empty() || ui->PortField->text().toStdString().empty())
         return;
     try {
-    this->server = new Server(ui->IpField->text().toStdString(), ui->PortField->text().toInt(), *this);
-    this->tcpThread = new boost::thread(boost::bind(&Server::run, this->server));
-    this->server->sendLoginMsg(ui->LoginField->text().toStdString().substr(0,31));
+        this->server = new Server(ui->IpField->text().toStdString(), ui->PortField->text().toInt(), *this);
+        this->tcpThread = new boost::thread(boost::bind(&Server::run, this->server));
+        this->server->sendLoginMsg(ui->LoginField->text().toStdString().substr(0,31));
     }
     catch (const std::exception& e) {
+        std::cout << "Der" << std::endl;
     }
     ui->Contact->setEnabled(true);
     ui->Login->setEnabled(false);
@@ -66,10 +67,10 @@ void MainWindow::PressContact()
         this->server->sendQueryMsg(ui->ContactField->text().toStdString());
 }
 
-unsigned char *MainWindow::sendVoice()
+void MainWindow::sendVoice(IVoiceStream *remote)
 {
 	es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
-	return(ss.getReadBuffer());
+    remote->writeData(ss.getReadBuffer(), ss.getReadBufferSize());
 }
 
 void MainWindow::receiveVoice(unsigned char* buff, int size)
@@ -93,6 +94,8 @@ void MainWindow::PressCall()
 			this->server->sendCallMsg(a.id);
 			ui->Hangup->setEnabled(true);
 			ui->Call->setEnabled(false);
+            this->onCall = true;
+            this->call(this->udpServer);
 		}
 	}
 
@@ -110,16 +113,26 @@ void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
 
 void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
 {
-	std::strcpy(this->target, msg.address);
+    //this->target = msg.getHeader().from;
     this->udpClient->connect(std::string(msg.address), 2222);
     this->udpClient->start();
 	this->onCall = true;
+    this->call(this->udpServer);
 }
 
 void MainWindow::handleHangup()
 {
+    this->target = 0;
 	this->onCall = false;
 	ui->Call->setEnabled(true);
 	ui->Hangup->setEnabled(false);
+    //this->server->sendHangupMsg();
     this->udpClient->disconnect();
+}
+
+void MainWindow::call(IVoiceStream *remote)
+{
+    while (this->onCall) {
+        sendVoice(remote);
+    }
 }
