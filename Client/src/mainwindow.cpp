@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     this->udpServerThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpServer));
     this->udpClient = new ClientVoice();
     this->udpClient->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
-    this->udpClientThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpClient));
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +55,7 @@ void MainWindow::PressLogin()
     }
     catch (const std::exception& e) {
         std::cout << "Der" << std::endl;
+        return;
     }
     ui->Contact->setEnabled(true);
     ui->Login->setEnabled(false);
@@ -75,6 +75,7 @@ void MainWindow::sendVoice(IVoiceStream *remote)
 
 void MainWindow::receiveVoice(unsigned char* buff, int size)
 {
+    std::cout << "LULZ" << std::endl;
 	es.decode(buff, size);
 	ss.readFromStream(buff);
 }
@@ -98,7 +99,6 @@ void MainWindow::PressCall()
             this->call(this->udpServer);
 		}
 	}
-
 }
 
 void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
@@ -114,10 +114,12 @@ void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
 void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
 {
     //this->target = msg.getHeader().from;
+    std::cout << "Handle Call" << std::endl;
     this->udpClient->connect(std::string(msg.address), 2222);
-    this->udpClient->start();
+    std::cout << "Addr: " << std::string(msg.address) << std::endl;
+    this->udpClientThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpClient));
 	this->onCall = true;
-    this->call(this->udpServer);
+    this->call(this->udpClient);
 }
 
 void MainWindow::handleHangup()
@@ -132,6 +134,7 @@ void MainWindow::handleHangup()
 
 void MainWindow::call(IVoiceStream *remote)
 {
+    std::cout << "INSIDE" << std::endl;
     while (this->onCall) {
         sendVoice(remote);
     }

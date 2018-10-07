@@ -31,6 +31,9 @@ ServerVoice::~ServerVoice()
 
 void ServerVoice::start() noexcept
 {
+	this->socket.async_send_to(boost::asio::buffer("START"),
+		this->endpoint, boost::bind(&ServerVoice::handleWrite, this,
+			boost::asio::placeholders::error));
 	this->io_service.run();
 }
 
