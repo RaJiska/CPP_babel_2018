@@ -19,6 +19,10 @@ int main(int argc, char **argv)
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();
+	/* while (1) {
+	w.sendVoice();
+	w.recieveVoice(w.ss.getReadBuffer(), w.ss.getReadBufferSize());
+	} */
 
 	return a.exec();
 	// Server s("127.0.0.1", 1111);

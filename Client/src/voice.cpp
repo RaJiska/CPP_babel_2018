@@ -89,9 +89,9 @@ bool	Voice::writeOnStream(unsigned char *buff)
 	return (true);
 }
 
-bool	Voice::readFromStream()
+bool	Voice::readFromStream(unsigned char *buff)
 {
-	if ((Pa_ReadStream(_stream, _readBuffer, ::FRAMES_PER_BUFFER)) != paNoError)
+	if ((Pa_ReadStream(_stream, buff, ::FRAMES_PER_BUFFER)) != paNoError)
 		return (false);
 	return (true);
 }

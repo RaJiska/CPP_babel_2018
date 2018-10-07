@@ -42,7 +42,7 @@
 			bool	initOutputParams();
 			bool	initParams();
 			bool	writeOnStream(unsigned char *buff);
-			bool	readFromStream();
+			bool	readFromStream(unsigned char *buff);
 			void	cleanReadBuffer();
 			int	getReadBufferSize() const;
 			unsigned char	*getReadBuffer() const;
