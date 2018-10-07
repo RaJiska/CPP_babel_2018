@@ -39,6 +39,7 @@ class Server {
 	void run() noexcept;
 
 	std::vector<Client> clientsList;
+	boost::asio::io_service io_service;
 
 	private:
 	void start() noexcept;
@@ -54,7 +55,6 @@ class Server {
 	std::unordered_map<
 		unsigned char,
 		std::function<void(NetworkMessage &)>> msgMap;
-	boost::asio::io_service io_service;
 	boost::asio::ip::tcp::socket socket;
 	unsigned char readData[8192];
 	MainWindow &window;

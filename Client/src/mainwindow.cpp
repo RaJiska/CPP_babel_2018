@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     if (this->server != nullptr) {
+	this->server->io_service.stop();
         this->tcpThread->join();
         this->server->sendLogoutMsg();
     }
