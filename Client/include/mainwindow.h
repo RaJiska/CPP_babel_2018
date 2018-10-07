@@ -30,7 +30,7 @@ class MainWindow : public QMainWindow
     public slots:
         void PressLogin();
         void PressContact();
-        void sendVoice();
+        unsigned char *sendVoice();
         void recieveVoice(unsigned char* buf, int size);
         void PressHangOut();
         void PressCall();

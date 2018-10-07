@@ -50,13 +50,10 @@ void MainWindow::PressContact()
         this->server->sendQueryMsg(ui->ContactField->text().toStdString());
 }
 
-void MainWindow::sendVoice()
+unsigned char *MainWindow::sendVoice()
 {
-	//while (this->onCall) {
-		es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
-        //sendVoicmsg
-		ss.writeOnStream(ss.getReadBuffer());
-	//}
+	es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
+	return(ss.getReadBuffer());
 }
 
 void MainWindow::recieveVoice(unsigned char* buff, int size)
