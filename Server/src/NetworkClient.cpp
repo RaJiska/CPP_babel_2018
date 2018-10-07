@@ -207,16 +207,14 @@ void NetworkClient::handleMsgQuery(NetworkMessage &msg) noexcept
 	respHeader.to = this->id;
 	respHeader.type = NetworkMessage::Header::TYPE_QUERY;
 	respHeader.size = sizeof(struct NetworkMessage::MsgQuery);
-	if (!this->server.clientExistsById(data->id))
-		data->id = 0;
-	else {
+	if (this->server.clientExistsByName(data->name)) {
+		auto client = this->server.clientByName(std::string(data->name));
+		data->id = client->getId();
 		std::strncpy(data->name,
-			this->server.clientById(
-				data->id)->getClient().getName().c_str(),
-			31)[31] = 0;
+			client->getClient().getName().c_str(), 31)[31] = 0;
+		NetworkMessage respMsg(msg);
+		this->sendMessage(msg);
 	}
-	NetworkMessage respMsg(msg);
-	this->sendMessage(msg);
 }
 
 void NetworkClient::handleMsgVoice(NetworkMessage &msg) noexcept

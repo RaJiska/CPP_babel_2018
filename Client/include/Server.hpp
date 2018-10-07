@@ -34,7 +34,7 @@ class Server {
 	void handleCallMsg(NetworkMessage msg) noexcept;
 	void sendHangupMsg(unsigned long long int target) noexcept;
 	void handleHangupMsg(NetworkMessage msg) noexcept;
-	void sendQueryMsg(unsigned long long int id) noexcept;
+	void sendQueryMsg(const std::string &name) noexcept;
 	void handleQueryMsg(NetworkMessage msg) noexcept;
 	void run() noexcept;
 

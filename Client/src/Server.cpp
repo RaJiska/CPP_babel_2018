@@ -108,7 +108,7 @@ void Server::handleHangupMsg(NetworkMessage msg) noexcept
 {
 }
 
-void Server::sendQueryMsg(unsigned long long int id) noexcept
+void Server::sendQueryMsg(const std::string &name) noexcept
 {
 	NetworkMessage msg;
 	struct NetworkMessage::Header &header = msg.getHeader();
@@ -118,12 +118,13 @@ void Server::sendQueryMsg(unsigned long long int id) noexcept
 	header.size = sizeof(struct NetworkMessage::MsgQuery);
 	struct NetworkMessage::MsgQuery *data =
 		(struct NetworkMessage::MsgQuery *) msg.getData();
-	data->id = id;
+	std::strncpy(data->name, name.c_str(), 31)[31] = 0;
 	this->sendMessage(msg);
 }
 
 void Server::handleQueryMsg(NetworkMessage msg) noexcept
 {
+	this->window.handleContact(*(NetworkMessage::MsgQuery *) msg.getData());
 }
 
 void Server::sendMessage(NetworkMessage &msg) noexcept

@@ -45,9 +45,8 @@ void MainWindow::PressLogin()
 
 void MainWindow::PressContact()
 {
-    //this->server->sendListMsg();
     if (!ui->ContactField->text().toStdString().empty())
-        ui->listWidget->addItem(QString::fromStdString(ui->ContactField->text().toStdString()));
+        this->server->sendQueryMsg(ui->ContactField->text().toStdString());
 }
 
 void MainWindow::sendVoice()
