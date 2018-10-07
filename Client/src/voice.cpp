@@ -82,16 +82,16 @@ bool	Voice::initOutputParams()
 
 bool	Voice::writeOnStream(unsigned char *buff)
 {
-	if ((Pa_WriteStream(_stream, _readBuffer, ::FRAMES_PER_BUFFER)) != paNoError) {
+	if ((Pa_WriteStream(_stream, buff, ::FRAMES_PER_BUFFER)) != paNoError) {
 		std::cout << "FAIL WRITE" <<std::endl;
 		return (false);
 	}
 	return (true);
 }
 
-bool	Voice::readFromStream(unsigned char *buff)
+bool	Voice::readFromStream()
 {
-	if ((Pa_ReadStream(_stream, buff, ::FRAMES_PER_BUFFER)) != paNoError)
+	if ((Pa_ReadStream(_stream, _readBuffer, ::FRAMES_PER_BUFFER)) != paNoError)
 		return (false);
 	return (true);
 }

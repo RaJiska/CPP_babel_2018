@@ -65,7 +65,7 @@ void MainWindow::PressContact()
 void MainWindow::sendVoice(IVoiceStream *remote)
 {
     std::cout << "send" << std::endl;
-	ss.readFromStream(ss.getReadBuffer());
+	ss.readFromStream();
 	//es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
     //print_hexa(ss.getReadBuffer(), es.getEncodeLen(), 0);
     remote->writeData(ss.getReadBuffer(), es.getEncodeLen());
