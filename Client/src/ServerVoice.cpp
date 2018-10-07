@@ -31,9 +31,6 @@ ServerVoice::~ServerVoice()
 
 void ServerVoice::start() noexcept
 {
-	this->socket.async_send_to(boost::asio::buffer("START"),
-		this->endpoint, boost::bind(&ServerVoice::handleWrite, this,
-			boost::asio::placeholders::error));
 	this->io_service.run();
 }
 
@@ -66,7 +63,7 @@ void ServerVoice::setReadCallback(
 
 void ServerVoice::writeData(const unsigned char *data, size_t sz) noexcept
 {
-	if (this->connected)
+	//if (this->connected)
 		this->socket.async_send_to(boost::asio::buffer(data, sz),
 			endpoint, boost::bind(&ServerVoice::handleWrite, this,
 				boost::asio::placeholders::error));
@@ -79,8 +76,13 @@ void ServerVoice::handleRead(
 		this->connected = true;
 	else if (this->connected && nbytes >= 3 && !memcmp(this->readBuffer, "END", 3))
 		this->connected = false;
-	else
+	else {
+		std::cout << "Srv Read: " << this->readBuffer << std::endl;
 		this->readCallback(this->readBuffer, nbytes);
+		this->socket.async_send_to(boost::asio::buffer("START"),
+		this->endpoint, boost::bind(&ServerVoice::handleWrite, this,
+			boost::asio::placeholders::error));
+	}
 }
 
 void ServerVoice::handleWrite(const boost::system::error_code &err) noexcept

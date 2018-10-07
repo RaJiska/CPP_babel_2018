@@ -13,18 +13,30 @@
 #include "Server.hpp"
 #include <boost/chrono.hpp>
 #include <boost/thread/thread.hpp>
+#include "ClientVoice.hpp"
+#include "ServerVoice.hpp"
 
 int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();
-	/* while (1) {
-	w.sendVoice();
-	w.recieveVoice(w.ss.getReadBuffer(), w.ss.getReadBufferSize());
-	} */
 
 	return a.exec();
+
+	/*
+	IVoiceStream *srv = new ServerVoice(2222);
+	boost::thread tSrv(boost::bind(&IVoiceStream::start, srv));
+	IVoiceStream *cli = new ClientVoice("127.0.0.1", 2222);
+	boost::thread tCli(boost::bind(&IVoiceStream::start, cli));
+	cli->writeData((const unsigned char *) "Hello", 5);
+	usleep(500);
+	srv->writeData((const unsigned char *) "World", 5);
+	tSrv.join();
+	tCli.join();
+	*/
+
+
 	// Server s("127.0.0.1", 1111);
 	// while (true) {
 	// 	std::cout << "[BEFORE] Bytes Avail: " << s.socket->bytesAvailable() << std::endl;

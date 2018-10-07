@@ -18,12 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->Contact, SIGNAL(clicked()), this, SLOT (PressContact()));
     QObject::connect(ui->Hangup, SIGNAL(clicked()), this, SLOT (PressHangup()));
     QObject::connect(ui->Call, SIGNAL(clicked()), this, SLOT (PressCall()));
-
-    this->udpServer = new ServerVoice(2222);
-    this->udpServer->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
-    this->udpServerThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpServer));
-    this->udpClient = new ClientVoice();
-    this->udpClient->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 MainWindow::~MainWindow()
@@ -32,14 +26,6 @@ MainWindow::~MainWindow()
         this->server->sendLogoutMsg();
         this->server->io_service.stop();
         this->tcpThread->join();
-        if (this->udpServer != nullptr) {
-            this->udpServer->disconnect();
-            this->udpServerThread->join();
-        }
-        if (this->udpClient != nullptr) {
-            this->udpClient->disconnect();
-            this->udpClientThread->join();
-        }
     }
     delete ui;
 }
@@ -55,7 +41,6 @@ void MainWindow::PressLogin()
     }
     catch (const std::exception& e) {
         std::cout << "Der" << std::endl;
-        return;
     }
     ui->Contact->setEnabled(true);
     ui->Login->setEnabled(false);
@@ -64,7 +49,7 @@ void MainWindow::PressLogin()
 void MainWindow::PressContact()
 {
     if (!ui->ContactField->text().toStdString().empty())
-        this->server->sendQueryMsg(ui->ContactField->text().toStdString().substr(0,31));
+        this->server->sendQueryMsg(ui->ContactField->text().toStdString());
 }
 
 void MainWindow::sendVoice(IVoiceStream *remote)
@@ -77,7 +62,9 @@ void MainWindow::receiveVoice(unsigned char* buff, int size)
 {
     std::cout << "LULZ" << std::endl;
 	es.decode(buff, size);
+    std::cout << "Lel" << std::endl;
 	ss.readFromStream(buff);
+    std::cout << "Lol" << std::endl;
 }
 
 void MainWindow::PressHangup()
@@ -115,7 +102,7 @@ void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
 {
     //this->target = msg.getHeader().from;
     std::cout << "Handle Call" << std::endl;
-    this->udpClient->connect(std::string(msg.address), 2222);
+    this->udpClient = new ClientVoice(msg.address, 2222);
     std::cout << "Addr: " << std::string(msg.address) << std::endl;
     this->udpClientThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpClient));
 	this->onCall = true;

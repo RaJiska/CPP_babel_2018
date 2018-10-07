@@ -63,27 +63,30 @@ void ClientVoice::setReadCallback(
 void ClientVoice::writeData(
 	const unsigned char *data, size_t sz) noexcept
 {
-	std::cout << "Writing" << std::endl;
-	if (this->connected) {
-		std::cout << "Writing Connected" << std::endl;
+	//std::cout << "Writing" << std::endl;
+	//if (this->connected) {
+//		std::cout << "Writing Connected" << std::endl;
 		this->socket.async_send_to(boost::asio::buffer(data, sz),
 		*this->endpoint, boost::bind(&ClientVoice::handleWrite, this,
 			boost::asio::placeholders::error));
-	}
+	//}
 }
 
 void ClientVoice::handleRead(
 	const boost::system::error_code &error, size_t nbytes) noexcept
 {
 	std::cout << "Read Base" << std::endl;
+	/*
 	if (!this->connected && nbytes >= 5 && !memcmp(this->readBuffer, "START", 5))
 		this->connected = true;
 	else if (this->connected && nbytes >= 3 && !memcmp(this->readBuffer, "END", 3))
 		this->connected = false;
 	else {
+		*/
 		std::cout << "READ DATA CALLBACK" << std::endl;
+		std::cout << "Cli Read: " << this->readBuffer << std::endl;
 		this->readCallback(this->readBuffer, nbytes);
-	}
+	//}
 }
 
 void ClientVoice::handleWrite(const boost::system::error_code &err) noexcept
