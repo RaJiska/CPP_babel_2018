@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->Call, SIGNAL(clicked()), this, SLOT (PressCall()));
 
     IVoiceStream *srv = new ServerVoice(2222);
-	this->udpServerThread = boost::thread(boost::bind(&IVoiceStream::start, srv));
+	this->udpServerThread = new boost::thread(boost::bind(&IVoiceStream::start, srv));
 }
 
 MainWindow::~MainWindow()
@@ -29,7 +29,7 @@ MainWindow::~MainWindow()
         this->server->sendLogoutMsg();
         this->server->io_service.stop();
         this->tcpThread->join();
-        thos->tSrv.join();
+        this->tSrv->join();
     }
     delete ui;
 }
