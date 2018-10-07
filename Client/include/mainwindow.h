@@ -38,7 +38,7 @@ class MainWindow : public QMainWindow
 
     private:
         Ui::MainWindow *ui;
-        Server *server;
+        Server *server = nullptr;
         boost::thread *tcpThread;
 	    EncoderSystem es;
         bool onCall = false;
