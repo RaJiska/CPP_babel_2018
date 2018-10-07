@@ -54,8 +54,10 @@ void Server::handleLoginMsg(NetworkMessage msg) noexcept
 	struct NetworkMessage::Header &header = msg.getHeader();
 	struct NetworkMessage::MsgLogin *data =
 		(struct NetworkMessage::MsgLogin *) msg.getData();
-	if (header.from == header.to)
+	if (header.from == header.to) {
 		this->clientId = data->id;
+		this->window.handleLogin();
+	}
 }
 
 void Server::sendLogoutMsg() noexcept

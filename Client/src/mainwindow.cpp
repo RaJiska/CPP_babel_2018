@@ -51,7 +51,7 @@ void MainWindow::PressLogin()
 		this->server->sendLoginMsg(
 			ui->LoginField->text().toStdString().substr(0,31));
 	} catch (const std::exception& e) {
-		std::cout << "Der" << std::endl;
+		return;
 	}
 	ui->Contact->setEnabled(true);
 	ui->Login->setEnabled(false);
@@ -128,6 +128,12 @@ void MainWindow::handleHangup()
 	ui->Call->setEnabled(true);
 	ui->Hangup->setEnabled(false);
 	this->udpClient->disconnect();
+}
+
+void MainWindow::handleLogin()
+{
+	ui->Contact->setEnabled(true);
+	ui->Login->setEnabled(false);
 }
 
 void MainWindow::call(IVoiceStream *remote)

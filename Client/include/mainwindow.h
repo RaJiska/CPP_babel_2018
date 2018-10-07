@@ -39,6 +39,7 @@ class MainWindow : public QMainWindow
         void handleContact(NetworkMessage::MsgQuery &msg);
         void handleCall(NetworkMessage::MsgCall &msg);
         void handleHangup();
+        void handleLogin();
         void call(IVoiceStream *remote);
 
     private:
