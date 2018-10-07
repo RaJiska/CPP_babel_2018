@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLineEdit>
+#include <boost/thread/thread.hpp>
 #include <iostream>
 #include "ui_mainwindow.h"
 #include "Server.hpp"
@@ -26,7 +27,7 @@ class MainWindow : public QMainWindow
     private:
         Ui::MainWindow *ui;
         Server *server;
-
+        boost::thread *tcpThread;
 };
 
 #endif // MAINWINDOW_H

@@ -8,7 +8,8 @@
 #ifndef SERVER_HPP_
 	#define SERVER_HPP_
 
-#include <QtNetwork>
+#include <boost/asio.hpp>
+#include <unordered_map>
 #include "NetworkMessage.hpp"
 
 class Server {
@@ -22,21 +23,37 @@ class Server {
 	Server(const std::string &address, uint16_t port);
 	~Server();
 
-	NetworkMessage sendLoginMsg(const std::string &name) noexcept;
-	NetworkMessage sendLogoutMsg() noexcept;
+	void sendLoginMsg(const std::string &name) noexcept;
+	void handleLoginMsg(NetworkMessage msg) noexcept;
+	void sendLogoutMsg() noexcept;
+	void handleLogoutMsg(NetworkMessage msg) noexcept;
 	void sendCallMsg(unsigned long long int target) noexcept;
+	void handleCallMsg(NetworkMessage msg) noexcept;
 	void sendHangupMsg(unsigned long long int target) noexcept;
+	void handleHangupMsg(NetworkMessage msg) noexcept;
 	void sendListMsg() noexcept;
+	void handleListMsg(NetworkMessage msg) noexcept;
+	void run() noexcept;
+
+	std::vector<Client> clientsList;
 
 	private:
+	void start() noexcept;
 	void sendMessage(NetworkMessage &msg) noexcept;
-	NetworkMessage readMessage() noexcept;
-	void readNBytes(QByteArray &arr, qint64 nBytes) noexcept;
+	void handleWrite(const boost::system::error_code &err) noexcept;
+	void handleReadHeader(
+		const boost::system::error_code &err, size_t bytes_transferred);
+	void handleReadData(
+		const boost::system::error_code &err, size_t bytes_transferred);
 
-	QTcpSocket socket;
 	unsigned long long int clientId;
-	NetworkMessage response;
-	std::vector<Client> clientsList;
+	NetworkMessage msg;
+	std::unordered_map<
+		unsigned char,
+		std::function<void(NetworkMessage &)>> msgMap;
+	boost::asio::io_service io_service;
+	boost::asio::ip::tcp::socket socket;
+	unsigned char readData[8192];
 };
 
 #endif /* !SERVER_HPP_ */

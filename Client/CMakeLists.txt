@@ -38,5 +38,5 @@ include_directories("${PROJECT_SHAREDINCL_DIR}")
 qt5_wrap_ui(UI_GENERATED_HEADERS "ui/mainwindow.ui")
 
 add_executable(babel_client ${SRCS} ${INCLUDES} ${UI_GENERATED_HEADERS})
-qt5_use_modules(babel_client Core Widgets Network)
+qt5_use_modules(babel_client Core Widgets)
 target_link_libraries(babel_client ${CONAN_LIBS})

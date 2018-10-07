@@ -47,14 +47,14 @@ class NetworkClient {
 	/// \param err : Error code from boost if something happens
 	/// \param bytes_transferred : Amount of bytes already readed
 	void handleReadHeader(
-		const boost::system::error_code& err, size_t bytes_transferred);
+		const boost::system::error_code &err, size_t bytes_transferred);
 
 	/// \brief
 	/// Reads and set the data from the received data
 	/// \param err : Error code from boost if something happens
 	/// \param bytes_transferred : Amount of bytes already readed
 	void handleReadData(
-		const boost::system::error_code& err, size_t bytes_transferred);
+		const boost::system::error_code &err, size_t bytes_transferred);
 
 	/// \brief
 	/// Handler function used to write data

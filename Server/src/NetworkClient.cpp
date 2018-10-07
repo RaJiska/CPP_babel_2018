@@ -44,7 +44,7 @@ void NetworkClient::start()
 }
 
 void NetworkClient::handleReadHeader(
-	const boost::system::error_code& err, size_t bytes_transferred)
+	const boost::system::error_code &err, size_t bytes_transferred)
 {
 	if (err)
 		this->disconnect(err.message());
@@ -61,13 +61,17 @@ void NetworkClient::handleReadHeader(
 }
 
 void NetworkClient::handleReadData(
-	const boost::system::error_code& err, size_t bytes_transferred)
+	const boost::system::error_code &err, size_t bytes_transferred)
 {
 	if (err)
 		this->disconnect(std::to_string(err.value()) + err.message());
 	else {
 		this->msg.setData(this->readData, this->msg.getHeader().size);
-		this->msgMap[this->msg.getHeader().type](msg);
+		try {
+			this->msgMap[this->msg.getHeader().type](msg);
+		}
+		catch (std::exception &e) {
+		}
 		this->start();
 	}
 }

@@ -13,12 +13,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     this->server->sendLogoutMsg();
+    this->tcpThread->join();
     delete ui;
 }
 
 void MainWindow::PressLogin()
 {
     this->server = new Server(ui->IpField->text().toStdString(), ui->PortField->text().toInt());
+    this->tcpThread = new boost::thread(boost::bind(&Server::run, this->server));
     this->server->sendLoginMsg(ui->LoginField->text().toStdString().substr(0,31));
     ui->Contact->setEnabled(true);
 }
