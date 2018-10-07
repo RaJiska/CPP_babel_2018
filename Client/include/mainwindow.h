@@ -35,6 +35,8 @@ class MainWindow : public QMainWindow
         void PressHangOut();
         void PressCall();
         void handleContact(NetworkMessage::MsgQuery &msg);
+        void handleCall(NetworkMessage::MsgCall &msg);
+        void handleHangOut();
 
     private:
         Ui::MainWindow *ui;
@@ -43,6 +45,7 @@ class MainWindow : public QMainWindow
 	    EncoderSystem es;
         bool onCall = false;
         std::vector<NetworkMessage::MsgQuery> clientsList;
+        char target[32];
 
 };
 

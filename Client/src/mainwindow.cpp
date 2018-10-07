@@ -91,3 +91,16 @@ void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
 	this->clientsList.push_back(msg);
 	ui->listWidget->addItem(QString::fromStdString(std::string(msg.name)));
 }
+
+void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
+{
+	strcpy(this->target, msg.address);
+	this->onCall = true;
+}
+
+void MainWindow::handleHangOut()
+{
+	this->onCall = false;
+	ui->Call->setEnabled(true);
+	ui->HangOut->setEnabled(false);
+}
