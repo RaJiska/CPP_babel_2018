@@ -10,6 +10,7 @@
 #include "Server.hpp"
 #include "voice.hpp"
 #include "encode.hpp"
+#include "NetworkMessage.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,7 @@ class MainWindow : public QMainWindow
         void recieveVoice(unsigned char* buf, int size);
         void PressHangOut();
         void PressCall();
+        void handleContact(NetworkMessage::MsgQuery &msg);
 
     private:
         Ui::MainWindow *ui;
@@ -37,7 +39,7 @@ class MainWindow : public QMainWindow
         boost::thread *tcpThread;
 	    EncoderSystem es;
         bool onCall = false;
-        std::vector<Server::Client> clientsList;
+        std::vector<NetworkMessage::MsgQuery> clientsList;
 
 };
 

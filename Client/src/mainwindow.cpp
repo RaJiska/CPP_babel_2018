@@ -73,5 +73,12 @@ void MainWindow::PressHangOut()
 
 void MainWindow::PressCall()
 {
+    //if ()
     //ui->listWidget->
+}
+
+void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
+{
+	this->clientsList.push_back(msg);
+	ui->listWidget->addItem(QString::fromStdString(std::string(msg.name)));
 }
