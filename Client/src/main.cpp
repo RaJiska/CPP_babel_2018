@@ -37,14 +37,10 @@ int main(int argc, char **argv)
 	cli->setReadCallback(test);
 	boost::thread tCli(boost::bind(&IVoiceStream::start, cli));
 
-	cli->writeData((const unsigned char *) "Hello", 5);
 	srv->writeData((const unsigned char *) "World", 5);
+	cli->writeData((const unsigned char *) "Hello", 5);
 	cli->writeData((const unsigned char *) "A", 1);
 	srv->writeData((const unsigned char *) "B", 1);
-	cli->writeData((const unsigned char *) "C", 1);
-	srv->writeData((const unsigned char *) "D", 1);
-	cli->writeData((const unsigned char *) "E", 1);
-	srv->writeData((const unsigned char *) "F", 1);
 	tSrv.join();
 	tCli.join();
 	*/

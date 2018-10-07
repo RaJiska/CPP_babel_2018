@@ -70,7 +70,7 @@ void ClientVoice::writeData(
 void ClientVoice::handleRead(
 	const boost::system::error_code &error, size_t nbytes) noexcept
 {
-	std::cout << "Cli Read: " << this->readBuffer << std::endl;
+	std::cout << "Cli Read: " << nbytes << std::endl;
 	this->readCallback(this->readBuffer, nbytes);
 	this->socket.async_receive_from(
 		boost::asio::buffer(this->readBuffer, 8192), *this->endpoint,

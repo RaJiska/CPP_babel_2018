@@ -1,5 +1,13 @@
 #include "mainwindow.h"
 
+void print_hexa(unsigned char *a, size_t bytes, int type)
+{
+    printf(((type) ? "RECEIVE: \n" : "SEND: \n"));
+    for (int it = 0; it < bytes; ++it)
+        printf("%02X ", a + it);
+    printf("\n");
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -56,17 +64,29 @@ void MainWindow::PressContact()
 
 void MainWindow::sendVoice(IVoiceStream *remote)
 {
-	es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
-    ss.writeOnStream(ss.getReadBuffer());
+    std::cout << "send" << std::endl;
+	ss.readFromStream(ss.getReadBuffer());
+	//es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
+    //print_hexa(ss.getReadBuffer(), es.getEncodeLen(), 0);
     remote->writeData(ss.getReadBuffer(), es.getEncodeLen());
-    /* es.decode(ss.getReadBuffer(), es.getEncodeLen());
-	ss.readFromStream(ss.getReadBuffer()); */
+    /* es.decode(ss.getReadBuffer(), es.getEncodeLen()); */
+	/* ss.readFromStream(ss.getReadBuffer());
+	es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
+    //ss.writeOnStream(ss.getReadBuffer());
+    print_hexa(ss.getReadBuffer(), es.getEncodeLen(), 0);
+    remote->writeData(ss.getReadBuffer(), es.getEncodeLen());
+    //es.decode(ss.getReadBuffer(), es.getEncodeLen()); */
 }
 
 void MainWindow::receiveVoice(unsigned char* buff, int size)
 {
-	es.decode(buff, size);
-	ss.readFromStream(buff);
+    std::cout << "receive" << std::endl;
+	//es.decode(buff, size);
+    ss.writeOnStream(buff);
+    /* print_hexa(ss.getReadBuffer(), es.getEncodeLen(), 1);
+    es.decode(buff, size);
+    ss.writeOnStream(buff); */
+	//ss.readFromStream(buff);
 }
 
 void MainWindow::PressHangup()
@@ -109,7 +129,7 @@ void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
     this->udpClient->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
     this->udpClientThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpClient));
 	this->onCall = true;
-    this->call(this->udpServer);
+    this->call(this->udpClient);
 }
 
 void MainWindow::handleHangup()
