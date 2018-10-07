@@ -4,11 +4,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    es.encoderCreate();
-    es.decoderCreate();
-    ss.initPa();
-	ss.initParams();
-	ss.initStream();
+    if (!es.encoderCreate() || !es.decoderCreate() || !ss.initPa() || !ss.initParams() ||	!ss.initStream())
+        exit(0);
     ui->setupUi(this);
     ui->Contact->setEnabled(false);
     ui->listWidget->clear();
@@ -18,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->Contact, SIGNAL(clicked()), this, SLOT (PressContact()));
     QObject::connect(ui->Hangup, SIGNAL(clicked()), this, SLOT (PressHangup()));
     QObject::connect(ui->Call, SIGNAL(clicked()), this, SLOT (PressCall()));
+
+    while (true)
+        this->sendVoice(this->udpClient);
 
     this->udpServer = new ServerVoice(2222);
     this->udpServer->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
@@ -60,16 +60,16 @@ void MainWindow::PressContact()
 void MainWindow::sendVoice(IVoiceStream *remote)
 {
 	es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
+    ss.writeOnStream(ss.getReadBuffer());
     remote->writeData(ss.getReadBuffer(), ss.getReadBufferSize());
+    /* es.decode(ss.getReadBuffer(), es.getEncodeLen());
+	ss.readFromStream(ss.getReadBuffer()); */
 }
 
 void MainWindow::receiveVoice(unsigned char* buff, int size)
 {
-    std::cout << "LULZ" << std::endl;
 	es.decode(buff, size);
-    std::cout << "Lel" << std::endl;
 	ss.readFromStream(buff);
-    std::cout << "Lol" << std::endl;
 }
 
 void MainWindow::PressHangup()

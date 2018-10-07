@@ -61,7 +61,7 @@ void ClientVoice::setReadCallback(
 void ClientVoice::writeData(
 	const unsigned char *data, size_t sz) noexcept
 {
-	std::cout << "Cli Write: " << data << std::endl;
+	std::cout << "Cli Write: " << sz << std::endl;
 	this->socket.async_send_to(boost::asio::buffer(data, sz),
 	*this->endpoint, boost::bind(&ClientVoice::handleWrite, this,
 		boost::asio::placeholders::error));
