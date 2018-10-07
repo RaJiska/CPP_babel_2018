@@ -23,9 +23,10 @@ bool	EncoderSystem::encoderCreate()
 {
 	int	error;
 
-	if ((_encode = opus_encoder_create(::SAMPLE_RATE_CODE, ::CHANNELS_CODE, OPUS_APPLICATION_VOIP, &error)) == NULL) {
-		std::cerr << "Can not create encode" <<std::endl;
-		return (false);
+	if ((_encode = opus_encoder_create(::SAMPLE_RATE_CODE, ::CHANNELS_CODE,
+		OPUS_APPLICATION_VOIP, &error)) == NULL) {
+			std::cerr << "Can not create encode" <<std::endl;
+			return (false);
 	}
 	return (true);
 }
@@ -34,9 +35,10 @@ bool	EncoderSystem::decoderCreate()
 {
 	int	error;
 
-	if ((_decode = opus_decoder_create(::SAMPLE_RATE_CODE, ::CHANNELS_CODE, &error)) == NULL) {
-		std::cerr << "Can not create decoder" <<std::endl;
-		return (false);
+	if ((_decode = opus_decoder_create(::SAMPLE_RATE_CODE,
+		::CHANNELS_CODE, &error)) == NULL) {
+			std::cerr << "Can not create decoder" <<std::endl;
+			return (false);
 	}
 	return (true);
 }
@@ -60,7 +62,8 @@ unsigned char*	EncoderSystem::decode(unsigned char *data, int size)
 {
 	int	frame_size = opus_decode(_decode, data, size, _out,
 				::MAX_FRAME_SIZE_CODE * ::CHANNELS_CODE * 2, 0);
-	unsigned char	*pcm_bytes = new unsigned char [::MAX_FRAME_SIZE_CODE * ::CHANNELS_CODE * 2];
+	unsigned char	*pcm_bytes = new unsigned char
+		[::MAX_FRAME_SIZE_CODE * ::CHANNELS_CODE * 2];
 
 	if (frame_size < 0) {
 		std::cerr << "cannot decode" << std::endl;

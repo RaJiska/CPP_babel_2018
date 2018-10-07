@@ -11,7 +11,8 @@
 #include <iostream>
 #include "Server.hpp"
 
-Server::Server(const std::string &address, uint16_t port, MainWindow &window) : window(window), socket(this->io_service)
+Server::Server(const std::string &address, uint16_t port, MainWindow &window) :
+	window(window), socket(this->io_service)
 {
 	boost::asio::ip::tcp::endpoint endp(
 		boost::asio::ip::address::from_string(address), port);

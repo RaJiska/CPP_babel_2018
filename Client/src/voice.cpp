@@ -64,7 +64,8 @@ bool	Voice::initInputParams()
 		return (false);
 	_inputParam.channelCount = 2;
 	_inputParam.sampleFormat = ::PA_SAMPLE_TYPE;
-	_inputParam.suggestedLatency = Pa_GetDeviceInfo(_inputParam.device)->defaultLowInputLatency;
+	_inputParam.suggestedLatency =
+		Pa_GetDeviceInfo(_inputParam.device)->defaultLowInputLatency;
 	_inputParam.hostApiSpecificStreamInfo = NULL;
 	return (true);
 }
@@ -75,7 +76,8 @@ bool	Voice::initOutputParams()
 		return (false);
 	_outputParam.channelCount = 2;
 	_outputParam.sampleFormat = ::PA_SAMPLE_TYPE;
-	_outputParam.suggestedLatency = Pa_GetDeviceInfo(_outputParam.device)->defaultLowInputLatency;
+	_outputParam.suggestedLatency =
+		Pa_GetDeviceInfo(_outputParam.device)->defaultLowInputLatency;
 	_outputParam.hostApiSpecificStreamInfo = NULL;
 	return (true);
 }
@@ -91,8 +93,9 @@ bool	Voice::writeOnStream(unsigned char *buff)
 
 bool	Voice::readFromStream()
 {
-	if ((Pa_ReadStream(_stream, _readBuffer, ::FRAMES_PER_BUFFER)) != paNoError)
-		return (false);
+	if ((Pa_ReadStream(_stream, _readBuffer,
+		::FRAMES_PER_BUFFER)) != paNoError)
+			return (false);
 	return (true);
 }
 
