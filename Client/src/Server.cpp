@@ -8,11 +8,10 @@
 #include <string>
 #include <boost/chrono.hpp>
 #include <boost/thread/thread.hpp>
-#include "Server.hpp"
 #include <iostream>
+#include "Server.hpp"
 
-Server::Server(const std::string &address, uint16_t port) :
-	socket(this->io_service)
+Server::Server(const std::string &address, uint16_t port, MainWindow &window) : window(window), socket(this->io_service)
 {
 	try {
 		boost::asio::ip::tcp::endpoint endp(
@@ -55,6 +54,11 @@ void Server::sendLoginMsg(const std::string &name) noexcept
 
 void Server::handleLoginMsg(NetworkMessage msg) noexcept
 {
+	struct NetworkMessage::Header &header = msg.getHeader();
+	struct NetworkMessage::MsgLogin *data =
+		(struct NetworkMessage::MsgLogin *) msg.getData();
+	if (header.from == header.to)
+		this->clientId = data->id;
 }
 
 void Server::sendLogoutMsg() noexcept
