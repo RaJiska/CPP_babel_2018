@@ -19,8 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->Hangup, SIGNAL(clicked()), this, SLOT (PressHangup()));
     QObject::connect(ui->Call, SIGNAL(clicked()), this, SLOT (PressCall()));
 
-    IVoiceStream *srv = new ServerVoice(2222);
-	this->udpServerThread = new boost::thread(boost::bind(&IVoiceStream::start, srv));
+    this->udpServer = new ServerVoice(2222);
+    this->udpServer->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
+	this->udpServerThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpServer));
 }
 
 MainWindow::~MainWindow()
@@ -29,7 +30,7 @@ MainWindow::~MainWindow()
         this->server->sendLogoutMsg();
         this->server->io_service.stop();
         this->tcpThread->join();
-        this->tSrv->join();
+        this->udpServerThread->join();
     }
     delete ui;
 }
@@ -108,6 +109,7 @@ void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
     std::cout << "Handle Call" << std::endl;
     this->udpClient = new ClientVoice(msg.address, 2222);
     std::cout << "Addr: " << std::string(msg.address) << std::endl;
+    this->udpClient->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
     this->udpClientThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpClient));
 	this->onCall = true;
     this->call(this->udpClient);
