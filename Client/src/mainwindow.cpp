@@ -74,7 +74,7 @@ void MainWindow::PressCall()
     	QList <QListWidgetItem *> list = ui->listWidget->selectedItems();
 	for (auto a : this->clientsList) {
 		if (std::string(a.name) == list[0]->text().toStdString()) {
-			//std::cout << "TEST" << std::endl;
+			this->server->sendCallMsg(a.id);
 			ui->HangOut->setEnabled(true);
 			ui->Call->setEnabled(false);
 		}
