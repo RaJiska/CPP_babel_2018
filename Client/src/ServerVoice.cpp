@@ -5,22 +5,48 @@
 ** ServerVoice
 */
 
-#include <boost/bind.hpp>
+#include "IVoiceStream.hpp"
 #include "ServerVoice.hpp"
 
-ServerVoice::ServerVoice(uint16_t port) :
+ServerVoice::ServerVoice(uint16_t port) : IVoiceStream(),
 	socket(io_service, boost::asio::ip::udp::endpoint(
 		boost::asio::ip::udp::v4(), port))
 {
 	this->socket.async_receive_from(
-		boost::asio::buffer(this->readBuffer), endpoint,
+		boost::asio::buffer(this->readBuffer, 8192), endpoint,
 		boost::bind(&ServerVoice::handleRead, this,
 			boost::asio::placeholders::error,
 			boost::asio::placeholders::bytes_transferred));
+	this->socket.async_send_to(boost::asio::buffer("START"),
+		endpoint, boost::bind(&ServerVoice::handleWrite, this,
+			boost::asio::placeholders::error));
 }
 
 ServerVoice::~ServerVoice()
 {
+	this->socket.async_send_to(boost::asio::buffer("END"),
+		endpoint, boost::bind(&ServerVoice::handleWrite, this,
+			boost::asio::placeholders::error));
+	this->socket.close();
+}
+
+void ServerVoice::start() noexcept
+{
+	this->io_service.run();
+}
+
+void ServerVoice::setReadCallback(
+	std::function<void(unsigned char *, size_t)> f) noexcept
+{
+	this->readCallback = f;
+}
+
+void ServerVoice::writeData(const unsigned char *data, size_t sz) noexcept
+{
+	if (this->connected)
+		this->socket.async_send_to(boost::asio::buffer(data, sz),
+			endpoint, boost::bind(&ServerVoice::handleWrite, this,
+				boost::asio::placeholders::error));
 }
 
 void ServerVoice::handleRead(
@@ -33,13 +59,6 @@ void ServerVoice::handleRead(
 	else {
 		/* Handle DATA to be read */
 	}
-}
-
-void ServerVoice::writeData(const unsigned char *data, size_t sz) noexcept
-{
-	this->socket.async_send_to(boost::asio::buffer(data, sz), endpoint,
-		boost::bind(&ServerVoice::handleWrite, this,
-			boost::asio::placeholders::error));
 }
 
 void ServerVoice::handleWrite(const boost::system::error_code &err) noexcept

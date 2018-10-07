@@ -23,6 +23,7 @@ SET (SRCS
 	"${SOURCE_DIR}/encode.cpp"
 	"${SOURCE_DIR}/Server.cpp"
 	"${SOURCE_DIR}/ServerVoice.cpp"
+	"${SOURCE_DIR}/ClientVoice.cpp"
 	"${PROJECT_SHAREDSRC_DIR}/NetworkMessage.cpp"
 )
 
@@ -31,7 +32,9 @@ SET (INCLUDES
 	"include/voice.hpp"
 	"include/encode.hpp"
 	"include/Server.hpp"
+	"include/IVoiceStream.hpp"
 	"include/ServerVoice.hpp"
+	"include/ClientVoice.hpp"
 )
 
 include_directories(${SOURCE_DIR}/include)

@@ -13,13 +13,9 @@
 
 Server::Server(const std::string &address, uint16_t port, MainWindow &window) : window(window), socket(this->io_service)
 {
-	try {
-		boost::asio::ip::tcp::endpoint endp(
-			boost::asio::ip::address::from_string(address), port);
-		this->socket.connect(endp);
-	}
-	catch (std::exception &e) {
-	}
+	boost::asio::ip::tcp::endpoint endp(
+		boost::asio::ip::address::from_string(address), port);
+	this->socket.connect(endp);
 	this->msgMap[NetworkMessage::Header::TYPE_LOGIN] =
 	std::bind(&Server::handleLoginMsg, this, std::placeholders::_1);
 	this->msgMap[NetworkMessage::Header::TYPE_LOGOUT] =
