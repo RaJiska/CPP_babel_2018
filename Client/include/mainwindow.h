@@ -6,6 +6,7 @@
 #include <QtWidgets/QLineEdit>
 #include <boost/thread/thread.hpp>
 #include <iostream>
+#include <algorithm>
 #include "ui_mainwindow.h"
 #include "Server.hpp"
 #include "voice.hpp"

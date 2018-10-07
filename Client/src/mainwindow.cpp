@@ -73,8 +73,15 @@ void MainWindow::PressHangOut()
 
 void MainWindow::PressCall()
 {
-    //if ()
-    //ui->listWidget->
+	//if ()
+    	//ui->listWidget->
+    	QList <QListWidgetItem *> list = ui->listWidget->selectedItems();
+	for (auto a : this->clientsList) {
+		if (std::string(a.name).compare(list[0]->text().toStdString())) {
+			//call
+		}
+	}
+
 }
 
 void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
