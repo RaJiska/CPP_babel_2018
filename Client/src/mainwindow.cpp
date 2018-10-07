@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->Contact->setEnabled(false);
     ui->listWidget->clear();
+    ui->HangOut->setEnabled(false);
     this->server = nullptr;
     QObject::connect(ui->Login, SIGNAL(clicked()), this, SLOT (PressLogin()));
     QObject::connect(ui->Contact, SIGNAL(clicked()), this, SLOT (PressContact()));
@@ -60,24 +61,25 @@ void MainWindow::sendVoice()
 
 void MainWindow::recieveVoice(unsigned char* buff, int size)
 {
-		es.decode(buff, size);
-		ss.readFromStream(buff);
-
+	es.decode(buff, size);
+	ss.readFromStream(buff);
 }
 
 void MainWindow::PressHangOut()
 {
     this->onCall = false;
+    ui->Call->setEnabled(true);
+    ui->HangOut->setEnabled(false);
 }
 
 void MainWindow::PressCall()
 {
-	//if ()
-    	//ui->listWidget->
     	QList <QListWidgetItem *> list = ui->listWidget->selectedItems();
 	for (auto a : this->clientsList) {
-		if (std::string(a.name).compare(list[0]->text().toStdString())) {
-			//call
+		if (std::string(a.name) == list[0]->text().toStdString()) {
+			//std::cout << "TEST" << std::endl;
+			ui->HangOut->setEnabled(true);
+			ui->Call->setEnabled(false);
 		}
 	}
 
