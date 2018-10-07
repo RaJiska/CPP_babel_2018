@@ -64,7 +64,7 @@ void MainWindow::PressLogin()
 void MainWindow::PressContact()
 {
     if (!ui->ContactField->text().toStdString().empty())
-        this->server->sendQueryMsg(ui->ContactField->text().toStdString());
+        this->server->sendQueryMsg(ui->ContactField->text().toStdString().substr(0,31));
 }
 
 void MainWindow::sendVoice(IVoiceStream *remote)
