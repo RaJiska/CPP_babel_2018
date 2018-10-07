@@ -11,6 +11,9 @@
 #include <boost/asio.hpp>
 #include <unordered_map>
 #include "NetworkMessage.hpp"
+#include "mainwindow.h"
+
+class MainWindow;
 
 class Server {
 	public:
@@ -20,7 +23,7 @@ class Server {
 		std::string name;
 	};
 
-	Server(const std::string &address, uint16_t port);
+	Server(const std::string &address, uint16_t port, MainWindow &window);
 	~Server();
 
 	void sendLoginMsg(const std::string &name) noexcept;
@@ -54,6 +57,7 @@ class Server {
 	boost::asio::io_service io_service;
 	boost::asio::ip::tcp::socket socket;
 	unsigned char readData[8192];
+	MainWindow &window;
 };
 
 #endif /* !SERVER_HPP_ */

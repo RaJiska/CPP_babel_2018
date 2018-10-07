@@ -125,7 +125,6 @@ void NetworkClient::handleMsgLogin(NetworkMessage &msg) noexcept
 		rHeader.type = NetworkMessage::Header::MessageType::TYPE_LOGIN;
 		rHeader.size = sizeof(struct NetworkMessage::MsgLogin);
 		this->sendMessage(msg);
-		//this->broadcastMsg(msg);
 	}
 	catch (std::exception &e) {
 		NetworkMessage rMsg(rHeader);
@@ -150,7 +149,6 @@ void NetworkClient::handleMsgLogout(NetworkMessage &msg) noexcept
 	rHeader.size = 0;
 	NetworkMessage rMsg(rHeader);
 	this->sendMessage(rMsg);
-	//this->broadcastMsg(rMsg);
 }
 
 void NetworkClient::handleMsgCall(NetworkMessage &msg) noexcept

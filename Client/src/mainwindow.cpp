@@ -33,7 +33,7 @@ void MainWindow::PressLogin()
     if (ui->LoginField->text().toStdString().empty() || ui->IpField->text().toStdString().empty() || ui->PortField->text().toStdString().empty())
         return;
     try {
-    this->server = new Server(ui->IpField->text().toStdString(), ui->PortField->text().toInt());
+    this->server = new Server(ui->IpField->text().toStdString(), ui->PortField->text().toInt(), *this);
     this->tcpThread = new boost::thread(boost::bind(&Server::run, this->server));
     this->server->sendLoginMsg(ui->LoginField->text().toStdString().substr(0,31));
     }

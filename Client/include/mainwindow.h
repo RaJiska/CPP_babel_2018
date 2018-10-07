@@ -17,6 +17,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class Server;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
