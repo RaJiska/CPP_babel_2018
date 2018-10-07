@@ -16,9 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->Hangup, SIGNAL(clicked()), this, SLOT (PressHangup()));
     QObject::connect(ui->Call, SIGNAL(clicked()), this, SLOT (PressCall()));
 
-    while (true)
-        this->sendVoice(this->udpClient);
-
     this->udpServer = new ServerVoice(2222);
     this->udpServer->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
 	this->udpServerThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpServer));
@@ -61,7 +58,7 @@ void MainWindow::sendVoice(IVoiceStream *remote)
 {
 	es.encode(ss.getReadBuffer(), ss.getReadBufferSize());
     ss.writeOnStream(ss.getReadBuffer());
-    remote->writeData(ss.getReadBuffer(), ss.getReadBufferSize());
+    remote->writeData(ss.getReadBuffer(), es.getEncodeLen());
     /* es.decode(ss.getReadBuffer(), es.getEncodeLen());
 	ss.readFromStream(ss.getReadBuffer()); */
 }
@@ -112,7 +109,7 @@ void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
     this->udpClient->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
     this->udpClientThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpClient));
 	this->onCall = true;
-    this->call(this->udpClient);
+    this->call(this->udpServer);
 }
 
 void MainWindow::handleHangup()
