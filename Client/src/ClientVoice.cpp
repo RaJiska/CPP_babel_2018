@@ -13,6 +13,10 @@ ClientVoice::ClientVoice(const std::string &addr, uint16_t port) :
 	this->connect(addr, port);
 }
 
+ClientVoice::ClientVoice() : IVoiceStream(), socket(this->io_service)
+{
+}
+
 ClientVoice::~ClientVoice()
 {
 }
@@ -38,7 +42,7 @@ void ClientVoice::connect(
 			boost::asio::placeholders::bytes_transferred));
 }
 
-void ClientVoice::disconnected() noexcept
+void ClientVoice::disconnect() noexcept
 {
 	this->socket.async_send_to(boost::asio::buffer("END"),
 		*this->endpoint, boost::bind(&ClientVoice::handleWrite, this,

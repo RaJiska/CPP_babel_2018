@@ -18,7 +18,7 @@ class ServerVoice : public IVoiceStream {
 
 	void start() noexcept;
 	void connect(const std::string &addr, uint16_t port) noexcept;
-	void disconnected() noexcept;
+	void disconnect() noexcept;
 	void setReadCallback(
 		std::function<void(unsigned char *, size_t)> f) noexcept;
 	void writeData(const unsigned char *data, size_t sz) noexcept;

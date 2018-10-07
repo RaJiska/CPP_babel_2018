@@ -20,7 +20,7 @@ class IVoiceStream {
 	virtual void start() noexcept = 0;
 	virtual void connect(
 		const std::string &addr, uint16_t port) noexcept = 0;
-	virtual void disconnected() noexcept = 0;
+	virtual void disconnect() noexcept = 0;
 	virtual void setReadCallback(
 		std::function<void(unsigned char *, size_t)>) noexcept = 0;
 	virtual void writeData(

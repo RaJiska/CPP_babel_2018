@@ -14,20 +14,21 @@
 class ClientVoice : public IVoiceStream {
 	public:
 	ClientVoice(const std::string &addr, uint16_t port);
+	ClientVoice();
 	~ClientVoice();
 
-	void start() noexcept = 0;
+	void start() noexcept;
 	void connect(const std::string &addr, uint16_t port) noexcept;
-	void disconnected() noexcept;
+	void disconnect() noexcept;
 	void setReadCallback(
-		std::function<void(unsigned char *, size_t)> f) noexcept = 0;
+		std::function<void(unsigned char *, size_t)> f) noexcept;
 	void writeData(
-		const unsigned char *data, size_t sz) noexcept = 0;
+		const unsigned char *data, size_t sz) noexcept;
 
 	private:
 	boost::asio::io_service io_service;
 	boost::asio::ip::udp::socket socket;
-	boost::asio::ip::udp::endpoint *endpoint = nullptr;
+	boost::asio::ip::udp::endpoint *endpoint = new boost::asio::ip::udp::endpoint();
 	std::function<void(unsigned char *, size_t)> readCallback;
 	bool connected = false;
 	unsigned char readBuffer[8192];

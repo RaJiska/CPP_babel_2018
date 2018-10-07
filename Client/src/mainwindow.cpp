@@ -18,14 +18,29 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->Contact, SIGNAL(clicked()), this, SLOT (PressContact()));
     QObject::connect(ui->Hangup, SIGNAL(clicked()), this, SLOT (PressHangup()));
     QObject::connect(ui->Call, SIGNAL(clicked()), this, SLOT (PressCall()));
+
+    this->udpServer = new ServerVoice(2222);
+    this->udpServer->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
+    this->udpServerThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpServer));
+    this->udpClient = new ClientVoice();
+    this->udpClient->setReadCallback(std::bind(&MainWindow::receiveVoice, this, std::placeholders::_1, std::placeholders::_2));
+    this->udpClientThread = new boost::thread(boost::bind(&IVoiceStream::start, this->udpClient));
 }
 
 MainWindow::~MainWindow()
 {
     if (this->server != nullptr) {
-	this->server->io_service.stop();
-        this->tcpThread->join();
         this->server->sendLogoutMsg();
+        this->server->io_service.stop();
+        this->tcpThread->join();
+        if (this->udpServer != nullptr) {
+            this->udpServer->disconnect();
+            this->udpServerThread->join();
+        }
+        if (this->udpClient != nullptr) {
+            this->udpClient->disconnect();
+            this->udpClientThread->join();
+        }
     }
     delete ui;
 }
@@ -57,7 +72,7 @@ unsigned char *MainWindow::sendVoice()
 	return(ss.getReadBuffer());
 }
 
-void MainWindow::recieveVoice(unsigned char* buff, int size)
+void MainWindow::receiveVoice(unsigned char* buff, int size)
 {
 	es.decode(buff, size);
 	ss.readFromStream(buff);
@@ -95,7 +110,9 @@ void MainWindow::handleContact(NetworkMessage::MsgQuery &msg)
 
 void MainWindow::handleCall(NetworkMessage::MsgCall &msg)
 {
-	strcpy(this->target, msg.address);
+	std::strcpy(this->target, msg.address);
+    this->udpClient->connect(std::string(msg.address), 2222);
+    this->udpClient->start();
 	this->onCall = true;
 }
 
@@ -104,4 +121,5 @@ void MainWindow::handleHangup()
 	this->onCall = false;
 	ui->Call->setEnabled(true);
 	ui->Hangup->setEnabled(false);
+    this->udpClient->disconnect();
 }

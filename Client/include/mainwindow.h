@@ -12,6 +12,8 @@
 #include "voice.hpp"
 #include "encode.hpp"
 #include "NetworkMessage.hpp"
+#include "ServerVoice.hpp"
+#include "ClientVoice.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -31,7 +33,7 @@ class MainWindow : public QMainWindow
         void PressLogin();
         void PressContact();
         unsigned char *sendVoice();
-        void recieveVoice(unsigned char* buf, int size);
+        void receiveVoice(unsigned char* buf, int size);
         void PressHangup();
         void PressCall();
         void handleContact(NetworkMessage::MsgQuery &msg);
@@ -41,7 +43,11 @@ class MainWindow : public QMainWindow
     private:
         Ui::MainWindow *ui;
         Server *server = nullptr;
+        IVoiceStream *udpServer = nullptr;
+        IVoiceStream *udpClient = nullptr;
         boost::thread *tcpThread;
+        boost::thread *udpServerThread = nullptr;
+        boost::thread *udpClientThread = nullptr;
 	    EncoderSystem es;
         bool onCall = false;
         std::vector<NetworkMessage::MsgQuery> clientsList;

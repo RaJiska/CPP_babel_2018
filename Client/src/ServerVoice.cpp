@@ -37,7 +37,7 @@ void ServerVoice::start() noexcept
 void ServerVoice::connect(
 	const std::string &addr, uint16_t port) noexcept
 {
-	socket.open(boost::asio::ip::udp::v4());
+	//socket.open(boost::asio::ip::udp::v4());
 	this->socket.async_receive_from(
 		boost::asio::buffer(this->readBuffer, 8192), this->endpoint,
 		boost::bind(&ServerVoice::handleRead, this,
@@ -45,7 +45,7 @@ void ServerVoice::connect(
 			boost::asio::placeholders::bytes_transferred));
 }
 
-void ServerVoice::disconnected() noexcept
+void ServerVoice::disconnect() noexcept
 {
 	this->socket.async_send_to(boost::asio::buffer("END"),
 		this->endpoint, boost::bind(&ServerVoice::handleWrite, this,
