@@ -16,6 +16,11 @@
 #include "ClientVoice.hpp"
 #include "ServerVoice.hpp"
 
+static void test(unsigned char *test, size_t nb)
+{
+	std::cout << "Result: " << test << "+" << nb << std::endl;
+}
+
 int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
@@ -26,12 +31,20 @@ int main(int argc, char **argv)
 
 	/*
 	IVoiceStream *srv = new ServerVoice(2222);
+	srv->setReadCallback(test);
 	boost::thread tSrv(boost::bind(&IVoiceStream::start, srv));
 	IVoiceStream *cli = new ClientVoice("127.0.0.1", 2222);
+	cli->setReadCallback(test);
 	boost::thread tCli(boost::bind(&IVoiceStream::start, cli));
+
 	cli->writeData((const unsigned char *) "Hello", 5);
-	usleep(500);
 	srv->writeData((const unsigned char *) "World", 5);
+	cli->writeData((const unsigned char *) "A", 1);
+	srv->writeData((const unsigned char *) "B", 1);
+	cli->writeData((const unsigned char *) "C", 1);
+	srv->writeData((const unsigned char *) "D", 1);
+	cli->writeData((const unsigned char *) "E", 1);
+	srv->writeData((const unsigned char *) "F", 1);
 	tSrv.join();
 	tCli.join();
 	*/

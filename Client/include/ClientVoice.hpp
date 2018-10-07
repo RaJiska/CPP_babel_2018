@@ -28,7 +28,7 @@ class ClientVoice : public IVoiceStream {
 	private:
 	boost::asio::io_service io_service;
 	boost::asio::ip::udp::socket socket;
-	boost::asio::ip::udp::endpoint *endpoint = new boost::asio::ip::udp::endpoint();
+	boost::asio::ip::udp::endpoint *endpoint;
 	std::function<void(unsigned char *, size_t)> readCallback;
 	bool connected = false;
 	unsigned char readBuffer[8192];
